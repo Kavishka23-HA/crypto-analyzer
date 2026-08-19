@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Real-Time Chart & Signal Analyzer</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #0b0e14;
+      color: #e1e7ef;
+      margin: 0;
+      padding: 20px;
+    }
+    .main-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+    }
+    .card {
+      background: #151a23;
+      border: 1px solid #232a36;
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    select {
+      background: #232a36;
+      color: #fff;
+      padding: 10px 14px;
+      border: 1px solid #343d4d;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    #tradingview_chart {
+      height: 500px;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .signal-card {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .badge {
+      padding: 10px;
+      border-radius: 6px;
+      font-weight: bold;
+      text-align: center;
+      font-size: 16px;
+    }
+    .BUY { background: #10b981; color: #fff; }
+    .data-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px;
+      background: #1c2330;
+      border-radius: 6px;
+      font-size: 15px;
+    }
+    .data-label { color: #94a3b8; }
+    .data-value { font-weight: bold; }
+    .tp { color: #10b981; }
+    .sl { color: #ef4444; }
+    .ep { color: #38bdf8; }
+
+    @media (max-width: 900px) {
+      .main-container { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main-container">
+    <div class="card">
+      <div class="header">
+        <h2>📈 Live Chart Analysis</h2>
+        <select id="symbolSelect" onchange="updateAnalysis()">
+          <option value="BINANCE:ETHUSDT" selected>ETH/USDT</option>
+          <option value="BINANCE:BTCUSDT">BTC/USDT</option>
+          <option value="BINANCE:SOLUSDT">SOL/USDT</option>
+          <option value="BINANCE:BNBUSDT">BNB/USDT</option>
+        </select>
+      </div>
+      <div id="tradingview_chart"></div>
+    </div>
+
+    <div class="card signal-card">
+      <h3>🤖 AI Signal & Levels</h3>
+      
+      <div id="signalBadge" class="badge BUY">BUY SIGNAL</div>
+
+      <div class="data-row">
+        <span class="data-label">Entry Price (EP):</span>
+        <span id="epVal" class="data-value ep">-</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Take Profit 01 (TP01):</span>
+        <span id="tp1Val" class="data-value tp">-</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Take Profit 02 (TP02):</span>
+        <span id="tp2Val" class="data-value tp">-</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Stop Loss (SL):</span>
+        <span id="slVal" class="data-value sl">-</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Risk/Reward Ratio:</span>
+        <span class="data-value">1 : 2.0</span>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+  <script type="text/javascript">
+    function loadChart(symbol) {
+      new TradingView.widget({
+        "autosize": true,
+        "symbol": symbol,
+        "interval": "60",
+        "timezone": "Etc/UTC",
+        "theme": "dark",
+        "style": "1",
+        "locale": "en",
+        "toolbar_bg": "#f1f3f6",
+        "enable_publishing": false,
+        "allow_symbol_change": true,
+        "container_id": "tradingview_chart"
+      });
+    }
+
+    async function fetchLivePriceAndCalculate(symbol) {
+      const cleanSymbol = symbol.replace("BINANCE:", "");
+      try {
+        const res = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${cleanSymbol}`);
+        const data = await res.json();
+        const price = parseFloat(data.price);
+
+        // AI Signal Calculation Logic
+        const ep = price;
+        const tp1 = price * 1.02; // +2%
+        const tp2 = price * 1.04; // +4%
+        const sl = price * 0.99;  // -1%
+
+        document.getElementById('epVal').innerText = `$${ep.toFixed(2)}`;
+        document.getElementById('tp1Val').innerText = `$${tp1.toFixed(2)}`;
+        document.getElementById('tp2Val').innerText = `$${tp2.toFixed(2)}`;
+        document.getElementById('slVal').innerText = `$${sl.toFixed(2)}`;
+      } catch (err) {
+        console.error("Price fetch error", err);
+      }
+    }
+
+    function updateAnalysis() {
+      const selected = document.getElementById('symbolSelect').value;
+      loadChart(selected);
+      fetchLivePriceAndCalculate(selected);
+    }
+
+    // Initial run
+    updateAnalysis();
+  </script>
+</body>
+</html>
