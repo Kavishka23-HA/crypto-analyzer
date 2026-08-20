@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CRYPTO-PULSE AI | Live Chart & AI Signals</title>
+  <title>CRYPTO-PULSE AI | Live Chart & VIP Signals</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -18,271 +18,45 @@
       --text-muted: #94a3b8;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
 
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--bg-dark);
-      color: var(--text-main);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      overflow-x: hidden;
-    }
+    .ticker-container { width: 100%; background: #0d121d; border-bottom: 1px solid var(--card-border); }
 
-    /* Top Ticker Tape Bar */
-    .ticker-container {
-      width: 100%;
-      background: #0d121d;
-      border-bottom: 1px solid var(--card-border);
-    }
+    header { display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background: rgba(13, 18, 29, 0.8); backdrop-filter: blur(10px); border-bottom: 1px solid var(--card-border); }
+    .brand-logo { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 22px; background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .brand-logo .logo-icon { width: 32px; height: 32px; background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue)); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #000; font-weight: bold; -webkit-text-fill-color: initial; }
 
-    /* Header Navbar */
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 30px;
-      background: rgba(13, 18, 29, 0.8);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--card-border);
-    }
+    .auth-btn { background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue)); border: none; padding: 8px 18px; border-radius: 20px; font-weight: 700; color: #000; cursor: pointer; transition: 0.3s; }
+    .auth-btn:hover { opacity: 0.9; transform: scale(1.02); }
 
-    .brand-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-weight: 800;
-      font-size: 22px;
-      letter-spacing: 1px;
-      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+    .dashboard-container { display: grid; grid-template-columns: 2.5fr 1fr; gap: 20px; padding: 20px; max-width: 1700px; margin: 0 auto; width: 100%; flex: 1; }
+    .glass-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; backdrop-filter: blur(16px); overflow: hidden; display: flex; flex-direction: column; position: relative; }
 
-    .brand-logo .logo-icon {
-      width: 32px;
-      height: 32px;
-      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #000;
-      font-weight: bold;
-      -webkit-text-fill-color: initial;
-    }
+    .chart-section { height: 720px; }
+    .signal-section { height: 720px; position: relative; }
 
-    .header-stats {
-      display: flex;
-      gap: 20px;
-    }
+    .section-header { padding: 16px 20px; border-bottom: 1px solid var(--card-border); display: flex; justify-content: space-between; align-items: center; }
+    .section-title { font-size: 16px; font-weight: 700; }
 
-    .stat-badge {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 13px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+    .signal-scroll-area { padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; flex: 1; filter: blur(6px); pointer-events: none; }
+    
+    /* VIP Blur Overlay */
+    .vip-lock-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(8, 11, 16, 0.85); backdrop-filter: blur(4px); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 30px; text-align: center; z-index: 10; }
+    .vip-badge { background: linear-gradient(135deg, #f6d365, #fda085); color: #000; padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 12px; margin-bottom: 12px; }
+    .vip-title { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+    .vip-price { font-size: 32px; font-weight: 800; color: var(--accent-cyan); margin: 10px 0; }
+    .payment-btns { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 260px; margin-top: 15px; }
+    .pay-btn { padding: 12px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.3s; }
+    .btn-binance { background: #F0B90B; color: #000; }
+    .btn-binance:hover { background: #d9a608; transform: scale(1.02); }
 
-    .dot-online {
-      width: 8px;
-      height: 8px;
-      background-color: var(--green-buy);
-      border-radius: 50%;
-      box-shadow: 0 0 8px var(--green-buy);
-    }
+    /* Modal for Login */
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 100; justify-content: center; align-items: center; }
+    .modal-content { background: #151a21; border: 1px solid var(--card-border); padding: 30px; border-radius: 16px; width: 320px; text-align: center; }
+    .login-option { width: 100%; padding: 12px; margin-top: 10px; border-radius: 8px; border: 1px solid var(--card-border); background: #1e2530; color: white; font-weight: 600; cursor: pointer; }
 
-    /* Main Container Layout */
-    .dashboard-container {
-      display: grid;
-      grid-template-columns: 2.5fr 1fr;
-      gap: 20px;
-      padding: 20px;
-      max-width: 1700px;
-      margin: 0 auto;
-      width: 100%;
-      flex: 1;
-    }
-
-    /* Common Card Styling */
-    .glass-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      backdrop-filter: blur(16px);
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* Left Side - Chart */
-    .chart-section {
-      height: 720px;
-      position: relative;
-    }
-
-    .section-header {
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--card-border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .section-title {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--text-main);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    /* Right Side - Signals */
-    .signal-section {
-      height: 720px;
-    }
-
-    .signal-scroll-area {
-      padding: 16px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      flex: 1;
-    }
-
-    /* Signal Card Style */
-    .signal-item {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 16px;
-      transition: all 0.3s ease;
-      position: relative;
-    }
-
-    .signal-item:hover {
-      transform: translateY(-2px);
-      border-color: rgba(255, 255, 255, 0.2);
-    }
-
-    .signal-item.buy-signal {
-      border-left: 4px solid var(--green-buy);
-      background: linear-gradient(90deg, rgba(0, 230, 118, 0.05) 0%, rgba(0,0,0,0) 100%);
-    }
-
-    .signal-item.sell-signal {
-      border-left: 4px solid var(--red-sell);
-      background: linear-gradient(90deg, rgba(255, 23, 68, 0.05) 0%, rgba(0,0,0,0) 100%);
-    }
-
-    .signal-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-    }
-
-    .pair-name {
-      font-weight: 700;
-      font-size: 16px;
-    }
-
-    .timeframe {
-      font-size: 12px;
-      color: var(--text-muted);
-      background: rgba(255, 255, 255, 0.05);
-      padding: 2px 6px;
-      border-radius: 4px;
-    }
-
-    .signal-type-tag {
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-size: 12px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .tag-buy {
-      background: rgba(0, 230, 118, 0.15);
-      color: var(--green-buy);
-      border: 1px solid rgba(0, 230, 118, 0.3);
-    }
-
-    .tag-sell {
-      background: rgba(255, 23, 68, 0.15);
-      color: var(--red-sell);
-      border: 1px solid rgba(255, 23, 68, 0.3);
-    }
-
-    .signal-details {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      background: rgba(0, 0, 0, 0.2);
-      padding: 10px;
-      border-radius: 8px;
-      margin-top: 10px;
-    }
-
-    .detail-box {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .detail-label {
-      font-size: 10px;
-      color: var(--text-muted);
-      text-transform: uppercase;
-    }
-
-    .detail-value {
-      font-size: 13px;
-      font-weight: 600;
-      margin-top: 2px;
-    }
-
-    .value-green { color: var(--green-buy); }
-    .value-red { color: var(--red-sell); }
-
-    /* Footer */
-    footer {
-      text-align: center;
-      padding: 15px;
-      font-size: 12px;
-      color: var(--text-muted);
-      border-top: 1px solid var(--card-border);
-      background: #080b10;
-    }
-
-    /* Responsive Mobile UI */
-    @media (max-width: 1024px) {
-      .dashboard-container {
-        grid-template-columns: 1fr;
-      }
-      .chart-section {
-        height: 500px;
-      }
-      .signal-section {
-        height: auto;
-      }
-      .header-stats {
-        display: none;
-      }
-    }
+    @media (max-width: 1024px) { .dashboard-container { grid-template-columns: 1fr; } .chart-section { height: 500px; } }
   </style>
 </head>
 <body>
@@ -296,50 +70,28 @@
         "symbols": [
           { "proName": "BINANCE:BTCUSDT", "title": "Bitcoin" },
           { "proName": "BINANCE:ETHUSDT", "title": "Ethereum" },
-          { "proName": "BINANCE:SOLUSDT", "title": "Solana" },
-          { "proName": "BINANCE:BNBUSDT", "title": "BNB" },
-          { "proName": "BINANCE:XRPUSDT", "title": "XRP" }
+          { "proName": "BINANCE:SOLUSDT", "title": "Solana" }
         ],
-        "showSymbolLogo": true,
-        "colorTheme": "dark",
-        "isTransparent": true,
-        "displayMode": "adaptive",
-        "locale": "en"
+        "colorTheme": "dark", "isTransparent": true, "displayMode": "adaptive", "locale": "en"
       }
       </script>
     </div>
   </div>
 
-  <!-- Header Navigation Bar -->
   <header>
     <div class="brand-logo">
       <div class="logo-icon">⚡</div>
       <span>CRYPTO-PULSE AI</span>
     </div>
-
-    <div class="header-stats">
-      <div class="stat-badge">
-        <span class="dot-online"></span>
-        AI Engine: <b>ONLINE</b>
-      </div>
-      <div class="stat-badge">
-        Accuracy Rate: <b style="color: var(--green-buy);">92.4%</b>
-      </div>
-      <div class="stat-badge">
-        Active Signals: <b>8</b>
-      </div>
-    </div>
+    <button class="auth-btn" onclick="openLoginModal()">Login / Register</button>
   </header>
 
-  <!-- Main Dashboard Grid -->
   <div class="dashboard-container">
     
-    <!-- 1. Real-Time TradingView Live Chart -->
+    <!-- Chart -->
     <div class="glass-card chart-section">
       <div class="section-header">
-        <div class="section-title">
-          <span>📈 Live Interactive Chart</span>
-        </div>
+        <div class="section-title">📈 Live Interactive Chart</div>
       </div>
       <div style="flex: 1; width: 100%; height: 100%;">
         <div class="tradingview-widget-container" style="height:100%; width:100%">
@@ -347,121 +99,69 @@
           <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
           <script type="text/javascript">
           new TradingView.widget({
-            "autosize": true,
-            "symbol": "BINANCE:BTCUSDT",
-            "interval": "15",
-            "timezone": "Etc/UTC",
-            "theme": "dark",
-            "style": "1",
-            "locale": "en",
-            "toolbar_bg": "#0d121d",
-            "enable_publishing": false,
-            "hide_side_toolbar": false,
-            "allow_symbol_change": true,
-            "details": true,
-            "hotlist": true,
-            "calendar": true,
-            "container_id": "tradingview_main_chart"
+            "autosize": true, "symbol": "BINANCE:BTCUSDT", "interval": "15", "theme": "dark", "style": "1", "locale": "en", "toolbar_bg": "#0d121d", "enable_publishing": false, "allow_symbol_change": true, "container_id": "tradingview_main_chart"
           });
           </script>
         </div>
       </div>
     </div>
 
-    <!-- 2. AI Signal Feed Panel -->
+    <!-- VIP Locked Signals Feed -->
     <div class="glass-card signal-section">
       <div class="section-header">
-        <div class="section-title">
-          <span>🎯 Real-Time AI Signals</span>
+        <div class="section-title">🎯 Real-Time AI Signals</div>
+      </div>
+
+      <!-- Lock Screen Overlay -->
+      <div class="vip-lock-overlay" id="lockOverlay">
+        <span class="vip-badge">PRO SIGNALS ACCESS</span>
+        <div class="vip-title">Unlock VIP Signals</div>
+        <p style="font-size: 13px; color: var(--text-muted);">Get lifetime unlimited access to high accuracy AI Trading Signals.</p>
+        <div class="vip-price">$25 <span style="font-size: 14px; color: var(--text-muted);">/ Lifetime</span></div>
+        
+        <div class="payment-btns">
+          <button class="pay-btn btn-binance" onclick="payBinance()">🟡 Pay with Binance Pay</button>
         </div>
       </div>
 
+      <!-- Signals (Blurred Background) -->
       <div class="signal-scroll-area">
-
-        <!-- Signal 1: BTC Buy -->
-        <div class="signal-item buy-signal">
-          <div class="signal-top">
-            <div>
-              <span class="pair-name">BTC / USDT</span>
-              <span class="timeframe">15m</span>
-            </div>
-            <span class="signal-type-tag tag-buy">STRONG BUY</span>
-          </div>
-          <div class="signal-details">
-            <div class="detail-box">
-              <span class="detail-label">Entry Price</span>
-              <span class="detail-value">$64,250</span>
-            </div>
-            <div class="detail-box">
-              <span class="detail-label">Take Profit</span>
-              <span class="detail-value value-green">$65,800</span>
-            </div>
-            <div class="detail-box">
-              <span class="detail-label">Stop Loss</span>
-              <span class="detail-value value-red">$63,500</span>
-            </div>
-          </div>
+        <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px;">
+          <h4>BTC / USDT (15m)</h4>
+          <p>Entry: $64,250 | TP: $65,800 | SL: $63,500</p>
         </div>
-
-        <!-- Signal 2: ETH Sell -->
-        <div class="signal-item sell-signal">
-          <div class="signal-top">
-            <div>
-              <span class="pair-name">ETH / USDT</span>
-              <span class="timeframe">1h</span>
-            </div>
-            <span class="signal-type-tag tag-sell">SELL</span>
-          </div>
-          <div class="signal-details">
-            <div class="detail-box">
-              <span class="detail-label">Entry Price</span>
-              <span class="detail-value">$3,480</span>
-            </div>
-            <div class="detail-box">
-              <span class="detail-label">Take Profit</span>
-              <span class="detail-value value-green">$3,320</span>
-            </div>
-            <div class="detail-box">
-              <span class="detail-label">Stop Loss</span>
-              <span class="detail-value value-red">$3,540</span>
-            </div>
-          </div>
+        <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px;">
+          <h4>ETH / USDT (1h)</h4>
+          <p>Entry: $3,480 | TP: $3,320 | SL: $3,540</p>
         </div>
-
-        <!-- Signal 3: SOL Buy -->
-        <div class="signal-item buy-signal">
-          <div class="signal-top">
-            <div>
-              <span class="pair-name">SOL / USDT</span>
-              <span class="timeframe">5m</span>
-            </div>
-            <span class="signal-type-tag tag-buy">SCALP BUY</span>
-          </div>
-          <div class="signal-details">
-            <div class="detail-box">
-              <span class="detail-label">Entry Price</span>
-              <span class="detail-value">$142.50</span>
-            </div>
-            <div class="detail-box">
-              <span class="detail-label">Take Profit</span>
-              <span class="detail-value value-green">$146.00</span>
-            </div>
-            <div class="detail-box">
-              <span class="detail-label">Stop Loss</span>
-              <span class="detail-value value-red">$140.20</span>
-            </div>
-          </div>
-        </div>
-
       </div>
     </div>
 
   </div>
 
-  <!-- Footer -->
-  <footer>
-    <p>© 2026 CRYPTO-PULSE AI. All Rights Reserved. Market data provided by TradingView.</p>
-  </footer>
+  <!-- Login Modal -->
+  <div class="modal" id="loginModal">
+    <div class="modal-content">
+      <h3>Login / Register</h3>
+      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">Choose your login method</p>
+      <button class="login-option" onclick="loginGoogle()">🌐 Sign in with Google</button>
+      <button class="login-option" onclick="loginPhone()">📱 Sign in with Mobile OTP</button>
+      <button style="margin-top: 15px; background: transparent; border: none; color: var(--text-muted); cursor: pointer;" onclick="closeLoginModal()">Cancel</button>
+    </div>
+  </div>
+
+  <script>
+    function openLoginModal() { document.getElementById('loginModal').style.display = 'flex'; }
+    function closeLoginModal() { document.getElementById('loginModal').style.display = 'none'; }
+    
+    function loginGoogle() { alert("Google Sign-In trigger"); closeLoginModal(); }
+    function loginPhone() { alert("Phone OTP login trigger"); closeLoginModal(); }
+
+    function payBinance() {
+      // Binance Pay Payment Link / QR Redirect
+      window.open("https://pay.binance.com", "_blank");
+    }
+  </script>
 
 </body>
 </html>
