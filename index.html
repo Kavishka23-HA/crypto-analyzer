@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CRYPTO-PULSE AI | Live Chart & Dynamic Signals</title>
+  <title>CRYPTO-PULSE AI | Free Live Chart & Real-Time Signals</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -27,31 +27,22 @@
     .brand-logo { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 22px; background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .brand-logo .logo-icon { width: 32px; height: 32px; background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue)); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #000; font-weight: bold; -webkit-text-fill-color: initial; }
 
-    .auth-btn { background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue)); border: none; padding: 8px 18px; border-radius: 20px; font-weight: 700; color: #000; cursor: pointer; transition: 0.3s; }
-    .auth-btn:hover { opacity: 0.9; transform: scale(1.02); }
+    .free-badge { background: rgba(0, 242, 254, 0.15); color: var(--accent-cyan); border: 1px solid var(--accent-cyan); padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 13px; }
 
     .dashboard-container { display: grid; grid-template-columns: 2.5fr 1fr; gap: 20px; padding: 20px; max-width: 1700px; margin: 0 auto; width: 100%; flex: 1; }
     .glass-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; backdrop-filter: blur(16px); overflow: hidden; display: flex; flex-direction: column; position: relative; }
 
     .chart-section { height: 720px; }
-    .signal-section { height: 720px; position: relative; }
+    .signal-section { height: 720px; }
 
     .section-header { padding: 16px 20px; border-bottom: 1px solid var(--card-border); display: flex; justify-content: space-between; align-items: center; }
     .section-title { font-size: 16px; font-weight: 700; }
 
-    .signal-scroll-area { padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; flex: 1; filter: blur(6px); pointer-events: none; }
-    
-    /* VIP Blur Overlay */
-    .vip-lock-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(8, 11, 16, 0.85); backdrop-filter: blur(4px); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 30px; text-align: center; z-index: 10; }
-    .vip-badge { background: linear-gradient(135deg, #f6d365, #fda085); color: #000; padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 12px; margin-bottom: 12px; }
-    .vip-title { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
-    .vip-price { font-size: 32px; font-weight: 800; color: var(--accent-cyan); margin: 10px 0; }
-    .payment-btns { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 260px; margin-top: 15px; }
-    .pay-btn { padding: 12px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.3s; }
-    .btn-binance { background: #F0B90B; color: #000; }
+    .signal-scroll-area { padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; flex: 1; }
 
     /* Signal Card Style */
-    .sig-card { background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); border-radius: 12px; padding: 16px; }
+    .sig-card { background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); border-radius: 12px; padding: 16px; transition: 0.3s; }
+    .sig-card:hover { border-color: var(--accent-cyan); }
     .sig-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
     .sig-pair { font-weight: 800; font-size: 16px; }
     .sig-tag-buy { background: rgba(0, 230, 118, 0.2); color: var(--green-buy); border: 1px solid var(--green-buy); padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 800; }
@@ -60,27 +51,10 @@
     .sig-val { font-size: 13px; font-weight: 700; margin-top: 4px; }
     .sig-lbl { font-size: 10px; color: var(--text-muted); text-transform: uppercase; }
 
-    /* Custom Modern Modal for Login */
-    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 100; justify-content: center; align-items: center; }
-    .modal-content { background: #121824; border: 1px solid var(--card-border); padding: 30px; border-radius: 16px; width: 360px; text-align: center; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-    .login-option { width: 100%; padding: 12px; margin-top: 12px; border-radius: 8px; border: 1px solid var(--card-border); background: #1a2232; color: white; font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 14px; }
-    .login-option:hover { background: #242f45; border-color: var(--accent-cyan); }
-    .phone-input { width: 100%; padding: 12px; margin-top: 12px; border-radius: 8px; border: 1px solid var(--card-border); background: #080b10; color: white; font-size: 14px; outline: none; }
-    .phone-input:focus { border-color: var(--accent-cyan); }
-    .submit-btn { width: 100%; padding: 12px; margin-top: 15px; border-radius: 8px; border: none; background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue)); color: #000; font-weight: 800; cursor: pointer; transition: 0.3s; }
-    .submit-btn:hover { opacity: 0.9; }
-
-    /* Modern Notification Toast (No Alerts!) */
-    .toast-msg { position: fixed; top: 20px; right: 20px; background: #1e293b; border-left: 4px solid var(--accent-cyan); color: white; padding: 12px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; box-shadow: 0 5px 15px rgba(0,0,0,0.3); opacity: 0; transform: translateY(-20px); transition: 0.4s ease; z-index: 200; pointer-events: none; }
-    .toast-msg.show { opacity: 1; transform: translateY(0); }
-
     @media (max-width: 1024px) { .dashboard-container { grid-template-columns: 1fr; } .chart-section { height: 500px; } }
   </style>
 </head>
 <body>
-
-  <!-- Toast Alert Notification -->
-  <div id="toast" class="toast-msg">Notification Message</div>
 
   <!-- Top Market Ticker Tape -->
   <div class="ticker-container">
@@ -106,7 +80,7 @@
       <div class="logo-icon">⚡</div>
       <span>CRYPTO-PULSE AI</span>
     </div>
-    <button class="auth-btn" id="userStatusBtn" onclick="openLoginModal()">Login / Register</button>
+    <div class="free-badge">🟢 100% Free Live Access</div>
   </header>
 
   <div class="dashboard-container">
@@ -129,25 +103,12 @@
       </div>
     </div>
 
-    <!-- VIP Signals Feed -->
+    <!-- Free Unlocked Real-Time Signals Feed -->
     <div class="glass-card signal-section">
       <div class="section-header">
         <div class="section-title">🎯 Real-Time AI Signals</div>
       </div>
 
-      <!-- Lock Screen Overlay -->
-      <div class="vip-lock-overlay" id="lockOverlay">
-        <span class="vip-badge">PRO SIGNALS ACCESS</span>
-        <div class="vip-title">Unlock VIP Signals</div>
-        <p style="font-size: 13px; color: var(--text-muted);">Get lifetime unlimited access to real-time accurate signals.</p>
-        <div class="vip-price">$25 <span style="font-size: 14px; color: var(--text-muted);">/ Lifetime</span></div>
-        
-        <div class="payment-btns">
-          <button class="pay-btn btn-binance" onclick="payBinance()">🟡 Pay with Binance Pay</button>
-        </div>
-      </div>
-
-      <!-- Live Dynamic Signals Area -->
       <div class="signal-scroll-area">
         
         <!-- BTC Signal -->
@@ -194,111 +155,7 @@
 
   </div>
 
-  <!-- Smooth Login Modal -->
-  <div class="modal" id="loginModal">
-    <div class="modal-content">
-      
-      <!-- Step 1: Login Options -->
-      <div id="loginStep1">
-        <h3 style="font-size: 20px; font-weight: 800;">Welcome Back</h3>
-        <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px; margin-bottom: 20px;">Choose your login method</p>
-        
-        <button class="login-option" onclick="showGoogleForm()">
-          <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
-          Sign in with Google
-        </button>
-
-        <button class="login-option" onclick="showPhoneForm()">📱 Sign in with Mobile Phone</button>
-      </div>
-
-      <!-- Google Selection Form -->
-      <div id="loginStepGoogle" style="display: none;">
-        <h3 style="font-size: 20px; font-weight: 800;">Google Sign-In</h3>
-        <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px; margin-bottom: 15px;">Select account to continue</p>
-        <button class="login-option" onclick="selectAccount('kavishka@gmail.com')">👤 kavishka@gmail.com</button>
-        <button class="login-option" onclick="selectAccount('user@gmail.com')">👤 user@gmail.com</button>
-      </div>
-
-      <!-- Phone Input Form -->
-      <div id="loginStep2" style="display: none;">
-        <h3 style="font-size: 20px; font-weight: 800;">Mobile Phone</h3>
-        <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Enter phone number with country code</p>
-        <input type="tel" id="phoneNumber" class="phone-input" placeholder="+94 77 123 4567" value="+94 ">
-        <button class="submit-btn" onclick="sendOTP()">Send OTP Code</button>
-      </div>
-
-      <!-- OTP Form -->
-      <div id="loginStep3" style="display: none;">
-        <h3 style="font-size: 20px; font-weight: 800;">Verify OTP</h3>
-        <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;" id="otpSubText">Enter 6-digit OTP code sent to your phone</p>
-        <input type="text" id="otpCode" class="phone-input" placeholder="1 2 3 4 5 6" maxlength="6" style="text-align: center; letter-spacing: 4px; font-weight: 700;">
-        <button class="submit-btn" onclick="verifyOTP()">Verify & Login</button>
-      </div>
-
-      <button style="margin-top: 18px; background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 13px;" onclick="closeLoginModal()">Cancel</button>
-    </div>
-  </div>
-
   <script>
-    // Modern Toast Message System
-    function showToast(msg) {
-      const toast = document.getElementById('toast');
-      toast.innerText = msg;
-      toast.classList.add('show');
-      setTimeout(() => { toast.classList.remove('show'); }, 3500);
-    }
-
-    function openLoginModal() { document.getElementById('loginModal').style.display = 'flex'; resetLoginForm(); }
-    function closeLoginModal() { document.getElementById('loginModal').style.display = 'none'; }
-    
-    function resetLoginForm() {
-      document.getElementById('loginStep1').style.display = 'block';
-      document.getElementById('loginStep2').style.display = 'none';
-      document.getElementById('loginStep3').style.display = 'none';
-      document.getElementById('loginStepGoogle').style.display = 'none';
-    }
-
-    function showGoogleForm() {
-      document.getElementById('loginStep1').style.display = 'none';
-      document.getElementById('loginStepGoogle').style.display = 'block';
-    }
-
-    function selectAccount(email) {
-      showToast("✅ Signed in as " + email);
-      document.getElementById('userStatusBtn').innerText = email;
-      closeLoginModal();
-    }
-
-    function showPhoneForm() { 
-      document.getElementById('loginStep1').style.display = 'none'; 
-      document.getElementById('loginStep2').style.display = 'block'; 
-    }
-
-    function sendOTP() {
-      var phone = document.getElementById('phoneNumber').value;
-      if(!phone.trim() || phone.trim() === "+94") {
-        showToast("⚠️ කරුණාකර දුරකථන අංකය ඇතුළත් කරන්න.");
-        return;
-      }
-      showToast("📲 OTP Code sent to " + phone);
-      document.getElementById('otpSubText').innerText = "OTP sent to " + phone;
-      document.getElementById('loginStep2').style.display = 'none';
-      document.getElementById('loginStep3').style.display = 'block';
-    }
-
-    function verifyOTP() {
-      var otp = document.getElementById('otpCode').value;
-      if(otp.trim().length < 4) {
-        showToast("❌ කරුණාකර නිවැරදි OTP Code එක ඇතුළත් කරන්න.");
-        return;
-      }
-      showToast("✅ Login Successful!");
-      document.getElementById('userStatusBtn').innerText = "Logged In";
-      closeLoginModal();
-    }
-
-    function payBinance() { window.open("https://s.binance.com/AbCdEfGh", "_blank"); }
-
     // REAL-TIME DYNAMIC PRICES FROM BINANCE API
     async function fetchLiveMarketPrices() {
       try {
