@@ -53,8 +53,14 @@
 
     /* Modal for Login */
     .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 100; justify-content: center; align-items: center; }
-    .modal-content { background: #151a21; border: 1px solid var(--card-border); padding: 30px; border-radius: 16px; width: 320px; text-align: center; }
-    .login-option { width: 100%; padding: 12px; margin-top: 10px; border-radius: 8px; border: 1px solid var(--card-border); background: #1e2530; color: white; font-weight: 600; cursor: pointer; }
+    .modal-content { background: #151a21; border: 1px solid var(--card-border); padding: 30px; border-radius: 16px; width: 340px; text-align: center; position: relative; }
+    .login-option { width: 100%; padding: 12px; margin-top: 10px; border-radius: 8px; border: 1px solid var(--card-border); background: #1e2530; color: white; font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .login-option:hover { background: #283242; }
+
+    /* Input Fields */
+    .phone-input { width: 100%; padding: 12px; margin-top: 10px; border-radius: 8px; border: 1px solid var(--card-border); background: #0d121d; color: white; font-size: 14px; outline: none; }
+    .phone-input:focus { border-color: var(--accent-cyan); }
+    .submit-btn { width: 100%; padding: 12px; margin-top: 15px; border-radius: 8px; border: none; background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue)); color: #000; font-weight: 800; cursor: pointer; }
 
     @media (max-width: 1024px) { .dashboard-container { grid-template-columns: 1fr; } .chart-section { height: 500px; } }
   </style>
@@ -83,7 +89,7 @@
       <div class="logo-icon">⚡</div>
       <span>CRYPTO-PULSE AI</span>
     </div>
-    <button class="auth-btn" onclick="openLoginModal()">Login / Register</button>
+    <button class="auth-btn" id="userStatusBtn" onclick="openLoginModal()">Login / Register</button>
   </header>
 
   <div class="dashboard-container">
@@ -142,24 +148,104 @@
   <!-- Login Modal -->
   <div class="modal" id="loginModal">
     <div class="modal-content">
-      <h3>Login / Register</h3>
-      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">Choose your login method</p>
-      <button class="login-option" onclick="loginGoogle()">🌐 Sign in with Google</button>
-      <button class="login-option" onclick="loginPhone()">📱 Sign in with Mobile OTP</button>
-      <button style="margin-top: 15px; background: transparent; border: none; color: var(--text-muted); cursor: pointer;" onclick="closeLoginModal()">Cancel</button>
+      
+      <!-- Step 1: Login Method Choice -->
+      <div id="loginStep1">
+        <h3>Login / Register</h3>
+        <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px; margin-bottom: 15px;">Choose your login method</p>
+        <button class="login-option" onclick="loginGoogle()">🌐 Sign in with Google</button>
+        <button class="login-option" onclick="showPhoneForm()">📱 Sign in with Mobile Phone</button>
+      </div>
+
+      <!-- Step 2: Phone Input Form -->
+      <div id="loginStep2" style="display: none;">
+        <h3>Mobile Phone Login</h3>
+        <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Enter your phone number with country code</p>
+        <input type="tel" id="phoneNumber" class="phone-input" placeholder="+94 77 123 4567">
+        <button class="submit-btn" onclick="sendOTP()">Send OTP Code</button>
+      </div>
+
+      <!-- Step 3: OTP Verification Form -->
+      <div id="loginStep3" style="display: none;">
+        <h3>Verify OTP</h3>
+        <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Enter the 6-digit OTP sent to your phone</p>
+        <input type="text" id="otpCode" class="phone-input" placeholder="1 2 3 4 5 6" maxlength="6">
+        <button class="submit-btn" onclick="verifyOTP()">Verify & Login</button>
+      </div>
+
+      <!-- Step 4: Google Choose Account Mock Modal -->
+      <div id="loginStepGoogle" style="display: none;">
+        <h3>Sign in with Google</h3>
+        <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px; margin-bottom: 15px;">Choose an account to continue</p>
+        <div class="login-option" onclick="completeGoogleLogin('user@gmail.com')">
+          <span>👤 user@gmail.com</span>
+        </div>
+        <div class="login-option" style="margin-top: 8px;" onclick="completeGoogleLogin('kavishka@gmail.com')">
+          <span>👤 kavishka@gmail.com</span>
+        </div>
+      </div>
+
+      <button style="margin-top: 15px; background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 13px;" onclick="closeLoginModal()">Cancel</button>
     </div>
   </div>
 
   <script>
-    function openLoginModal() { document.getElementById('loginModal').style.display = 'flex'; }
-    function closeLoginModal() { document.getElementById('loginModal').style.display = 'none'; }
+    function openLoginModal() {
+      document.getElementById('loginModal').style.display = 'flex';
+      resetLoginForm();
+    }
     
-    function loginGoogle() { alert("Google Sign-In trigger"); closeLoginModal(); }
-    function loginPhone() { alert("Phone OTP login trigger"); closeLoginModal(); }
+    function closeLoginModal() { 
+      document.getElementById('loginModal').style.display = 'none'; 
+    }
+
+    function resetLoginForm() {
+      document.getElementById('loginStep1').style.display = 'block';
+      document.getElementById('loginStep2').style.display = 'none';
+      document.getElementById('loginStep3').style.display = 'none';
+      document.getElementById('loginStepGoogle').style.display = 'none';
+    }
+
+    function showPhoneForm() {
+      document.getElementById('loginStep1').style.display = 'none';
+      document.getElementById('loginStep2').style.display = 'block';
+    }
+
+    function sendOTP() {
+      var phone = document.getElementById('phoneNumber').value;
+      if(phone.trim() === "") {
+        alert("කරුණාකර දුරකථන අංකය ඇතුළත් කරන්න.");
+        return;
+      }
+      alert("OTP Code sent to " + phone);
+      document.getElementById('loginStep2').style.display = 'none';
+      document.getElementById('loginStep3').style.display = 'block';
+    }
+
+    function verifyOTP() {
+      var otp = document.getElementById('otpCode').value;
+      if(otp.trim().length < 4) {
+        alert("කරුණාකර නිවැරදි OTP Code එක ඇතුළත් කරන්න.");
+        return;
+      }
+      alert("Login Successful!");
+      document.getElementById('userStatusBtn').innerText = "Logged In";
+      closeLoginModal();
+    }
+
+    function loginGoogle() {
+      document.getElementById('loginStep1').style.display = 'none';
+      document.getElementById('loginStepGoogle').style.display = 'block';
+    }
+
+    function completeGoogleLogin(email) {
+      alert("Successfully signed in with " + email);
+      document.getElementById('userStatusBtn').innerText = email;
+      closeLoginModal();
+    }
 
     function payBinance() {
-      // Binance Pay Payment Link / QR Redirect
-      window.open("https://pay.binance.com", "_blank");
+      window.open("https://s.binance.com/AbCdEfGh", "_blank");
     }
   </script>
 
