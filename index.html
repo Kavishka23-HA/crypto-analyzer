@@ -3,347 +3,320 @@
 <head>
   <meta charset="UTF-8">
   <meta name="google-site-verification" content="xtttowHOr_ogoG4Qo8ozArR_wI0g7n51zMJ-8qbQbUE" />
-  <meta name="description" content="Futuristic AI-powered real-time crypto chart and signal terminal for Top 20 Cryptocurrencies.">
+  <meta name="description" content="Cyber-Hacker Matrix Style AI Trading Terminal for Top 20 Cryptocurrencies.">
   <meta name="keywords" content="crypto analyzer, bitcoin live chart, crypto signals free, tradingview signals, btc eth chart">
   <meta name="robots" content="index, follow">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CRYPTO-PULSE AI | Next-Gen Trading Terminal</title>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>CYBER-PULSE // MATRIX AI TERMINAL</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-dark: #04070d;
-      --card-bg: rgba(13, 19, 32, 0.75);
-      --card-border: rgba(255, 255, 255, 0.08);
-      --card-border-glow: rgba(0, 242, 254, 0.3);
-      --accent-cyan: #00f2fe;
-      --accent-blue: #4facfe;
-      --accent-purple: #7f53ac;
-      --green-buy: #00e676;
-      --green-glow: rgba(0, 230, 118, 0.3);
-      --red-sell: #ff1744;
-      --red-glow: rgba(255, 23, 68, 0.3);
-      --text-main: #f8fafc;
-      --text-muted: #64748b;
+      --bg-dark: #020408;
+      --card-bg: rgba(5, 12, 8, 0.85);
+      --card-border: rgba(0, 255, 102, 0.2);
+      --matrix-green: #00ff66;
+      --matrix-green-glow: rgba(0, 255, 102, 0.4);
+      --cyber-cyan: #00f2fe;
+      --red-sell: #ff0055;
+      --red-glow: rgba(255, 0, 85, 0.4);
+      --text-main: #00ff66;
+      --text-muted: #4e8060;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    
-    body { 
-      font-family: 'Plus Jakarta Sans', sans-serif; 
-      background-color: var(--bg-dark); 
-      background-image: 
-        radial-gradient(at 0% 0%, rgba(0, 242, 254, 0.05) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(127, 83, 172, 0.08) 0px, transparent 50%);
-      color: var(--text-main); 
-      min-height: 100vh; 
-      display: flex; 
-      flex-direction: column; 
+
+    body {
+      font-family: 'Fira Code', monospace;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
       overflow-x: hidden;
+      position: relative;
     }
 
-    /* Top Ticker Bar Styling */
-    .ticker-container { 
-      width: 100%; 
-      background: rgba(6, 10, 18, 0.95); 
-      border-bottom: 1px solid var(--card-border); 
-      backdrop-filter: blur(10px);
+    /* Matrix Rain Canvas */
+    #matrix-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      opacity: 0.15;
+      pointer-events: none;
+    }
+
+    /* Cyber Scanline Overlay */
+    body::before {
+      content: " ";
+      display: block;
+      position: fixed;
+      top: 0; left: 0; bottom: 0; right: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+      z-index: 10;
+      background-size: 100% 3px, 3px 100%;
+      pointer-events: none;
+    }
+
+    /* Ticker Tape */
+    .ticker-container {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      background: rgba(2, 6, 4, 0.95);
+      border-bottom: 1px solid var(--card-border);
     }
 
     /* Header */
-    header { 
-      display: flex; 
-      justify-content: space-between; 
-      align-items: center; 
-      padding: 16px 32px; 
-      background: rgba(10, 15, 26, 0.8); 
-      backdrop-filter: blur(20px); 
-      border-bottom: 1px solid var(--card-border); 
-    }
-    
-    .brand-logo { 
-      display: flex; 
-      align-items: center; 
-      gap: 12px; 
-      font-weight: 800; 
-      font-size: 22px; 
-      letter-spacing: -0.5px;
-      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue)); 
-      -webkit-background-clip: text; 
-      -webkit-text-fill-color: transparent; 
-    }
-    
-    .brand-logo .logo-icon { 
-      width: 36px; 
-      height: 36px; 
-      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue)); 
-      border-radius: 10px; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      color: #000; 
-      font-weight: 900; 
-      font-size: 18px;
-      -webkit-text-fill-color: initial;
-      box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+    header {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 32px;
+      background: rgba(3, 8, 5, 0.9);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--card-border);
+      box-shadow: 0 0 20px rgba(0, 255, 102, 0.1);
     }
 
-    .badge-status { 
+    .brand-logo {
       display: flex;
       align-items: center;
-      gap: 8px;
-      background: rgba(0, 242, 254, 0.06); 
-      color: var(--accent-cyan); 
-      border: 1px solid rgba(0, 242, 254, 0.2); 
-      padding: 8px 16px; 
-      border-radius: 30px; 
-      font-weight: 700; 
-      font-size: 13px; 
-      box-shadow: 0 0 10px rgba(0, 242, 254, 0.1);
+      gap: 12px;
+      font-weight: 700;
+      font-size: 20px;
+      color: var(--matrix-green);
+      text-shadow: 0 0 10px var(--matrix-green-glow);
+      letter-spacing: 1px;
+    }
+
+    .brand-logo .logo-icon {
+      width: 34px; height: 34px;
+      border: 1px solid var(--matrix-green);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 12px var(--matrix-green-glow);
+      animation: pulse 2s infinite;
+    }
+
+    .badge-status {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(0, 255, 102, 0.05);
+      color: var(--matrix-green);
+      border: 1px solid var(--matrix-green);
+      padding: 6px 14px;
+      border-radius: 4px;
+      font-size: 12px;
+      box-shadow: 0 0 10px var(--matrix-green-glow);
     }
 
     .live-dot {
-      width: 8px;
-      height: 8px;
-      background-color: var(--green-buy);
+      width: 8px; height: 8px;
+      background-color: var(--matrix-green);
       border-radius: 50%;
-      box-shadow: 0 0 8px var(--green-buy);
-      animation: pulse 1.5s infinite;
+      box-shadow: 0 0 8px var(--matrix-green);
+      animation: blink 1s infinite alternate;
     }
 
-    @keyframes pulse {
-      0% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(1.2); }
-      100% { opacity: 1; transform: scale(1); }
-    }
+    @keyframes blink { 0% { opacity: 0.2; } 100% { opacity: 1; } }
+    @keyframes pulse { 0% { box-shadow: 0 0 5px var(--matrix-green); } 50% { box-shadow: 0 0 20px var(--matrix-green); } 100% { box-shadow: 0 0 5px var(--matrix-green); } }
 
-    /* Layout Dashboard */
-    .dashboard-container { 
-      display: grid; 
-      grid-template-columns: 2.8fr 1.2fr; 
-      gap: 24px; 
-      padding: 24px; 
-      max-width: 1800px; 
-      margin: 0 auto; 
-      width: 100%; 
-      flex: 1; 
-    }
-
-    .glass-card { 
-      background: var(--card-bg); 
-      border: 1px solid var(--card-border); 
-      border-radius: 20px; 
-      backdrop-filter: blur(20px); 
-      overflow: hidden; 
-      display: flex; 
-      flex-direction: column; 
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-      transition: border-color 0.3s;
-    }
-
-    .chart-section { height: 800px; }
-    .signal-section { height: 800px; }
-
-    /* Header Controls */
-    .section-header { 
-      padding: 16px 24px; 
-      border-bottom: 1px solid var(--card-border); 
-      display: flex; 
-      justify-content: space-between; 
-      align-items: center; 
-      flex-wrap: wrap; 
-      gap: 12px; 
-      background: rgba(255, 255, 255, 0.01);
-    }
-    
-    .section-title { 
-      font-size: 15px; 
-      font-weight: 700; 
-      display: flex; 
-      align-items: center; 
-      gap: 10px; 
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .active-symbol-badge {
-      color: var(--text-main);
-      background: rgba(255, 255, 255, 0.08);
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-weight: 800;
-      letter-spacing: 0;
-    }
-
-    /* Coin Selector Toolbar */
-    .coin-selector-group { 
-      display: flex; 
-      gap: 8px; 
-      overflow-x: auto; 
-      max-width: 100%; 
-      padding-bottom: 4px; 
-      align-items: center;
-    }
-    .coin-selector-group::-webkit-scrollbar { height: 4px; }
-    .coin-selector-group::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
-    
-    .coin-btn { 
-      background: rgba(255,255,255,0.03); 
-      border: 1px solid var(--card-border); 
-      color: var(--text-muted); 
-      padding: 8px 16px; 
-      border-radius: 10px; 
-      font-weight: 700; 
-      font-size: 12px; 
-      cursor: pointer; 
-      transition: all 0.25s ease; 
-      white-space: nowrap; 
-    }
-    .coin-btn:hover { 
-      background: rgba(255,255,255,0.08); 
-      color: var(--text-main); 
-      border-color: rgba(255,255,255,0.2);
-    }
-    .coin-btn.active { 
-      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue)); 
-      color: #000; 
-      border-color: transparent; 
-      box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
-    }
-
-    /* Search Input */
-    .search-box {
+    /* Dashboard Layout */
+    .dashboard-container {
       position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 2.8fr 1.2fr;
+      gap: 20px;
+      padding: 20px;
+      max-width: 1800px;
+      margin: 0 auto;
       width: 100%;
-      padding: 12px 16px;
-      border-bottom: 1px solid var(--card-border);
+      flex: 1;
     }
+
+    .glass-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      backdrop-filter: blur(16px);
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      box-shadow: 0 0 15px rgba(0,0,0,0.8);
+      transition: all 0.3s ease;
+    }
+
+    .chart-section { height: 780px; }
+    .signal-section { height: 780px; }
+
+    .section-header {
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--card-border);
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 10px;
+      background: rgba(0, 255, 102, 0.02);
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--matrix-green);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Coin Selector Buttons */
+    .coin-selector-group {
+      display: flex; gap: 6px;
+      overflow-x: auto; max-width: 100%;
+      padding-bottom: 4px;
+    }
+    .coin-selector-group::-webkit-scrollbar { height: 3px; }
+    .coin-selector-group::-webkit-scrollbar-thumb { background: var(--card-border); }
+
+    .coin-btn {
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-family: 'Fira Code', monospace;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .coin-btn:hover, .coin-btn.active {
+      background: var(--matrix-green);
+      color: #000;
+      font-weight: 700;
+      box-shadow: 0 0 10px var(--matrix-green-glow);
+    }
+
+    /* Search Box */
+    .search-box { padding: 10px 14px; border-bottom: 1px solid var(--card-border); }
     .search-input {
       width: 100%;
-      background: rgba(255, 255, 255, 0.04);
+      background: rgba(0, 0, 0, 0.8);
       border: 1px solid var(--card-border);
-      padding: 10px 14px;
-      border-radius: 10px;
-      color: #fff;
-      font-size: 13px;
+      padding: 8px 12px;
+      border-radius: 4px;
+      color: var(--matrix-green);
+      font-family: 'Fira Code', monospace;
+      font-size: 12px;
       outline: none;
-      transition: 0.3s;
     }
     .search-input:focus {
-      border-color: var(--accent-cyan);
-      box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+      border-color: var(--matrix-green);
+      box-shadow: 0 0 8px var(--matrix-green-glow);
     }
 
     /* Signal Scroll Container */
-    .signal-scroll-area { 
-      padding: 16px; 
-      overflow-y: auto; 
-      display: flex; 
-      flex-direction: column; 
-      gap: 12px; 
-      flex: 1; 
+    .signal-scroll-area {
+      padding: 14px;
+      overflow-y: auto;
+      display: flex; flex-direction: column; gap: 10px;
+      flex: 1;
     }
-    .signal-scroll-area::-webkit-scrollbar { width: 5px; }
-    .signal-scroll-area::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+    .signal-scroll-area::-webkit-scrollbar { width: 4px; }
+    .signal-scroll-area::-webkit-scrollbar-thumb { background: var(--card-border); }
 
-    /* Futuristic Signal Card */
-    .sig-card { 
-      background: rgba(255,255,255,0.02); 
-      border: 1px solid var(--card-border); 
-      border-radius: 14px; 
-      padding: 16px; 
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); 
-      cursor: pointer; 
-      position: relative;
+    /* Signal Card Style */
+    .sig-card {
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      padding: 12px;
+      transition: all 0.2s ease;
+      cursor: pointer;
     }
-    .sig-card:hover { 
-      border-color: rgba(255,255,255,0.2); 
-      transform: translateY(-2px);
-      background: rgba(255,255,255,0.04);
+    .sig-card:hover {
+      border-color: var(--matrix-green);
+      box-shadow: 0 0 12px var(--matrix-green-glow);
+      transform: translateX(3px);
     }
-    .sig-card.active-card { 
-      border-color: var(--accent-cyan); 
-      background: rgba(0, 242, 254, 0.04); 
-      box-shadow: inset 0 0 15px rgba(0, 242, 254, 0.05), 0 4px 20px rgba(0,0,0,0.3);
+    .sig-card.active-card {
+      border-color: var(--matrix-green);
+      background: rgba(0, 255, 102, 0.08);
+      box-shadow: inset 0 0 10px var(--matrix-green-glow);
     }
-    .sig-top { 
-      display: flex; 
-      justify-content: space-between; 
-      align-items: center; 
-      margin-bottom: 12px; 
-    }
-    .sig-pair { 
-      font-weight: 800; 
-      font-size: 15px; 
-      letter-spacing: 0.3px;
-    }
-    
-    /* Signal Badges */
+    .sig-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .sig-pair { font-weight: 700; font-size: 14px; color: #fff; }
+
     .sig-tag {
-      padding: 5px 12px; 
-      border-radius: 8px; 
-      font-size: 11px; 
-      font-weight: 800; 
-      letter-spacing: 0.5px;
+      padding: 3px 8px;
+      border-radius: 3px;
+      font-size: 10px;
+      font-weight: 700;
     }
-    .sig-tag-buy { 
-      background: rgba(0, 230, 118, 0.12); 
-      color: var(--green-buy); 
-      border: 1px solid var(--green-buy); 
-      box-shadow: 0 0 10px var(--green-glow);
+    .sig-tag-buy {
+      background: rgba(0, 255, 102, 0.15);
+      color: var(--matrix-green);
+      border: 1px solid var(--matrix-green);
+      box-shadow: 0 0 8px var(--matrix-green-glow);
     }
-    .sig-tag-sell { 
-      background: rgba(255, 23, 68, 0.12); 
-      color: var(--red-sell); 
-      border: 1px solid var(--red-sell); 
-      box-shadow: 0 0 10px var(--red-glow);
-    }
-
-    /* Signal Values Grid */
-    .sig-grid { 
-      display: grid; 
-      grid-template-columns: 1fr 1fr 1fr; 
-      gap: 10px; 
-      text-align: center; 
-      background: rgba(0, 0, 0, 0.2);
-      padding: 10px;
-      border-radius: 10px;
-    }
-    .sig-val { 
-      font-size: 13px; 
-      font-weight: 700; 
-      margin-top: 3px; 
-    }
-    .sig-lbl { 
-      font-size: 10px; 
-      color: var(--text-muted); 
-      text-transform: uppercase; 
-      font-weight: 600;
+    .sig-tag-sell {
+      background: rgba(255, 0, 85, 0.15);
+      color: var(--red-sell);
+      border: 1px solid var(--red-sell);
+      box-shadow: 0 0 8px var(--red-glow);
     }
 
-    @media (max-width: 1200px) { 
-      .dashboard-container { grid-template-columns: 1fr; } 
-      .chart-section { height: 550px; } 
-      .signal-section { height: 600px; } 
+    .sig-grid {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 6px; text-align: center;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 8px; border-radius: 4px;
+      border: 1px solid rgba(255,255,255,0.03);
+    }
+    .sig-val { font-size: 12px; font-weight: 600; margin-top: 2px; }
+    .sig-lbl { font-size: 9px; color: var(--text-muted); text-transform: uppercase; }
+
+    /* Terminal Console Box */
+    .terminal-logs {
+      position: relative; z-index: 2;
+      margin: 0 20px 20px 20px;
+      background: rgba(0, 5, 2, 0.9);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      padding: 10px 16px;
+      font-size: 11px;
+      color: var(--matrix-green);
+      height: 60px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+    .log-line { opacity: 0.8; margin-bottom: 2px; }
+
+    @media (max-width: 1200px) {
+      .dashboard-container { grid-template-columns: 1fr; }
+      .chart-section { height: 500px; }
+      .signal-section { height: 550px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Top Market Ticker Tape -->
+  <!-- Matrix Background Canvas -->
+  <canvas id="matrix-canvas"></canvas>
+
+  <!-- Top Market Ticker -->
   <div class="ticker-container">
     <div class="tradingview-widget-container">
       <div class="tradingview-widget-container__widget"></div>
       <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
       {
         "symbols": [
-          { "proName": "BINANCE:BTCUSDT", "title": "Bitcoin" },
-          { "proName": "BINANCE:ETHUSDT", "title": "Ethereum" },
-          { "proName": "BINANCE:SOLUSDT", "title": "Solana" },
+          { "proName": "BINANCE:BTCUSDT", "title": "BTC" },
+          { "proName": "BINANCE:ETHUSDT", "title": "ETH" },
+          { "proName": "BINANCE:SOLUSDT", "title": "SOL" },
           { "proName": "BINANCE:BNBUSDT", "title": "BNB" },
           { "proName": "BINANCE:XRPUSDT", "title": "XRP" },
-          { "proName": "BINANCE:ADAUSDT", "title": "Cardano" },
-          { "proName": "BINANCE:DOGEUSDT", "title": "Dogecoin" }
+          { "proName": "BINANCE:ADAUSDT", "title": "ADA" }
         ],
         "colorTheme": "dark", "isTransparent": true, "displayMode": "adaptive", "locale": "en"
       }
@@ -354,41 +327,37 @@
   <!-- Header -->
   <header>
     <div class="brand-logo">
-      <div class="logo-icon">⚡</div>
-      <span>CRYPTO-PULSE AI</span>
+      <div class="logo-icon">&gt;_</div>
+      <span>CYBER-PULSE // TERMINAL</span>
     </div>
     <div class="badge-status">
       <span class="live-dot"></span>
-      <span>REAL-TIME TERMINAL</span>
+      <span>SYSTEM ACTIVE // AI NODE CONNECTED</span>
     </div>
   </header>
 
-  <!-- Main Dashboard -->
+  <!-- Dashboard Container -->
   <div class="dashboard-container">
     
     <!-- Chart Box -->
     <div class="glass-card chart-section">
       <div class="section-header">
-        <div class="section-title">
-          <span>Chart View:</span> 
-          <span class="active-symbol-badge" id="current-symbol-title">BTC/USDT</span>
-        </div>
+        <div class="section-title">&gt; CHART: <span id="current-symbol-title" style="color:#fff;">BTC/USDT</span></div>
         <div class="coin-selector-group" id="coin-buttons-container"></div>
       </div>
-      <div style="flex: 1; width: 100%; height: 100%; position: relative;">
+      <div style="flex: 1; width: 100%; height: 100%;">
         <div id="tv_chart_container" style="height:100%; width:100%"></div>
       </div>
     </div>
 
-    <!-- Signals Box -->
+    <!-- Signal Area -->
     <div class="glass-card signal-section">
       <div class="section-header">
-        <div class="section-title">🎯 Market Signals (20 Crypto Coins)</div>
+        <div class="section-title">&gt; NEURAL SIGNALS FEED</div>
       </div>
 
-      <!-- Quick Search Bar -->
       <div class="search-box">
-        <input type="text" id="coinSearch" class="search-input" placeholder="🔍 Search Coin (e.g. SOL, XRP, DOGE)..." onkeyup="filterCoins()">
+        <input type="text" id="coinSearch" class="search-input" placeholder="root@terminal:~# search_coin..." onkeyup="filterCoins()">
       </div>
 
       <div class="signal-scroll-area" id="signals-container"></div>
@@ -396,9 +365,48 @@
 
   </div>
 
-  <!-- TradingView JS Library -->
+  <!-- Hacker Terminal Output Logs -->
+  <div class="terminal-logs" id="terminal-logs">
+    <div class="log-line">[SYS_INIT] Loading Neural Market Engine v4.2...</div>
+    <div class="log-line" id="latest-log">[SYNC] Connecting to Binance WebSocket Feed...</div>
+  </div>
+
   <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
   <script>
+    // 1. Matrix Rain Animation Script
+    const canvas = document.getElementById('matrix-canvas');
+    const ctx = canvas.getContext('2d');
+    
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    const chars = '0123456789ABCDEF%&*/<>#@$';
+    const fontSize = 12;
+    const columns = Math.floor(canvas.width / fontSize);
+    const drops = Array(columns).fill(1);
+
+    function drawMatrix() {
+      ctx.fillStyle = 'rgba(2, 4, 8, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#00ff66';
+      ctx.font = fontSize + 'px monospace';
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars.charAt(Math.floor(Math.random() * chars.length));
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+    setInterval(drawMatrix, 33);
+
+    // 2. Coin List Setup
     const coinList = [
       "BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT",
       "ADAUSDT", "DOGEUSDT", "AVAXUSDT", "LINKUSDT", "DOTUSDT",
@@ -408,7 +416,6 @@
 
     let currentSymbol = "BINANCE:BTCUSDT";
 
-    // Dynamic UI Construction
     function buildUI() {
       const btnContainer = document.getElementById('coin-buttons-container');
       const sigContainer = document.getElementById('signals-container');
@@ -419,14 +426,12 @@
       coinList.forEach((symbol, index) => {
         let coinName = symbol.replace('USDT', '');
         
-        // Buttons
         let btn = document.createElement('button');
         btn.className = `coin-btn ${index === 0 ? 'active' : ''}`;
         btn.innerText = coinName;
         btn.onclick = function() { switchChart(`BINANCE:${symbol}`, this); };
         btnContainer.appendChild(btn);
 
-        // Signal Cards
         let card = document.createElement('div');
         card.className = `sig-card ${index === 0 ? 'active-card' : ''}`;
         card.id = `card-${symbol}`;
@@ -436,23 +441,21 @@
         let prefix = coinName.toLowerCase();
         card.innerHTML = `
           <div class="sig-top">
-            <span class="sig-pair">${coinName} / USDT <small style="font-size:10px; color:var(--text-muted); font-weight:normal;">15m</small></span>
-            <span class="sig-tag sig-tag-buy" id="${prefix}-signal-tag">FETCHING</span>
+            <span class="sig-pair">${coinName}/USDT <small style="font-size:9px; color:var(--text-muted);">15M</small></span>
+            <span class="sig-tag sig-tag-buy" id="${prefix}-signal-tag">ANALYZING</span>
           </div>
           <div class="sig-grid">
             <div><div class="sig-lbl">Entry</div><div class="sig-val" id="${prefix}-entry">--</div></div>
-            <div><div class="sig-lbl">Take Profit</div><div class="sig-val" style="color:var(--green-buy);" id="${prefix}-tp">--</div></div>
-            <div><div class="sig-lbl">Stop Loss</div><div class="sig-val" style="color:var(--red-sell);" id="${prefix}-sl">--</div></div>
+            <div><div class="sig-lbl">Target</div><div class="sig-val" style="color:var(--matrix-green);" id="${prefix}-tp">--</div></div>
+            <div><div class="sig-lbl">Stop</div><div class="sig-val" style="color:var(--red-sell);" id="${prefix}-sl">--</div></div>
           </div>
         `;
         sigContainer.appendChild(card);
       });
     }
 
-    // Chart Renderer
     function loadTradingViewChart(symbol) {
       document.getElementById("tv_chart_container").innerHTML = "";
-      
       let readableName = symbol.replace('BINANCE:', '').replace('USDT', '') + '/USDT';
       document.getElementById("current-symbol-title").innerText = readableName;
 
@@ -463,15 +466,14 @@
         "theme": "dark",
         "style": "1",
         "locale": "en",
-        "toolbar_bg": "#060a12",
+        "toolbar_bg": "#020604",
         "enable_publishing": false,
         "allow_symbol_change": true,
         "container_id": "tv_chart_container"
       });
     }
 
-    // Switch Symbol
-    function switchChart(symbol, btnElement) {
+    function switchChart(symbol) {
       currentSymbol = symbol;
       loadTradingViewChart(symbol);
 
@@ -486,24 +488,27 @@
       document.querySelectorAll('.sig-card').forEach(card => card.classList.remove('active-card'));
       let activeCard = document.getElementById('card-' + rawPair);
       if (activeCard) activeCard.classList.add('active-card');
+
+      addLog(`[TARGET_UPDATE] Switched terminal view to ${targetCoin}/USDT`);
     }
 
-    // Search Filtering
     function filterCoins() {
       let input = document.getElementById('coinSearch').value.toLowerCase();
       let cards = document.querySelectorAll('.sig-card');
 
       cards.forEach(card => {
         let coin = card.getAttribute('data-coin');
-        if (coin.includes(input)) {
-          card.style.display = "block";
-        } else {
-          card.style.display = "none";
-        }
+        card.style.display = coin.includes(input) ? "block" : "none";
       });
     }
 
-    // Binance Price Fetcher & Signal Generator
+    function addLog(msg) {
+      const logContainer = document.getElementById('terminal-logs');
+      const time = new Date().toLocaleTimeString();
+      logContainer.innerHTML += `<div class="log-line">[${time}] ${msg}</div>`;
+      logContainer.scrollTop = logContainer.scrollHeight;
+    }
+
     async function fetchLiveMarketPrices() {
       try {
         const symbolsParam = JSON.stringify(coinList);
@@ -514,7 +519,6 @@
           let price = parseFloat(item.lastPrice);
           let change = parseFloat(item.priceChangePercent);
           let symbol = item.symbol;
-
           let isBuy = change >= 0;
 
           let decimals = price < 1 ? (price < 0.001 ? 6 : 4) : 2;
@@ -542,12 +546,12 @@
             }
           }
         });
+        addLog(`[SYNC_OK] Synchronized 20 AI Signals with Binance Data.`);
       } catch (err) {
-        console.error("Live price sync error: ", err);
+        addLog(`[SYNC_ERR] API Connection Failed. Retrying...`);
       }
     }
 
-    // App Initialization
     buildUI();
     loadTradingViewChart(currentSymbol);
     fetchLiveMarketPrices();
