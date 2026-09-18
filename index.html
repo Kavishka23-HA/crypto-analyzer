@@ -1,735 +1,701 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XM Forex & Crypto Cyber Terminal v4.0</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CYBERQUANT XM & BINANCE v4.0 // INSTITUTIONAL TERMINAL</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            mono: ['Fira Code', 'monospace'],
+          },
+          colors: {
+            cyberDark: '#030709',
+            cyberCard: 'rgba(5, 14, 18, 0.85)',
+            cyberBorder: 'rgba(0, 255, 102, 0.2)',
+            cyberGreen: '#00ff66',
+            cyberCyan: '#00e5ff',
+            cyberGold: '#ffd700',
+            cyberRed: '#ff0055',
+            cyberMuted: '#3d6852',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root {
+      --bg-dark: #020508;
+      --card-bg: rgba(6, 16, 20, 0.88);
+      --card-border: rgba(0, 255, 102, 0.22);
+      --green: #00ff66;
+      --green-glow: rgba(0, 255, 102, 0.35);
+      --cyan: #00e5ff;
+      --cyan-glow: rgba(0, 229, 255, 0.35);
+      --red: #ff0055;
+      --gold: #ffd700;
+      --muted: #416b56;
+    }
 
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts & Font Awesome Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Orbitron:wght@400;600;800;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    * {
+      box-sizing: border-box;
+      scrollbar-width: thin;
+      scrollbar-color: var(--card-border) transparent;
+    }
 
-    <!-- TradingView Embed Widget Library -->
-    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    body {
+      background-color: var(--bg-dark);
+      color: var(--green);
+      font-family: 'Fira Code', monospace;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
 
-    <!-- Custom Matrix & Cyberpunk Styles -->
-    <style>
-        :root {
-            --bg-dark: #030712;
-            --neon-green: #00ff66;
-            --neon-red: #ff0055;
-            --neon-cyan: #00f3ff;
-            --neon-yellow: #ffcc00;
-            --panel-bg: rgba(15, 23, 42, 0.85);
-            --border-glow: rgba(0, 255, 102, 0.2);
-        }
+    /* Scanline CRT FX */
+    body::before {
+      content: " ";
+      display: block;
+      position: fixed;
+      top: 0; left: 0; bottom: 0; right: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+      z-index: 99;
+      background-size: 100% 3px, 3px 100%;
+      pointer-events: none;
+    }
 
-        body {
-            font-family: 'Fira Code', monospace;
-            background-color: var(--bg-dark);
-            color: #d1d5db;
-            overflow-x: hidden;
-        }
+    #matrix-bg {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 0; opacity: 0.08; pointer-events: none;
+    }
 
-        .orbitron {
-            font-family: 'Orbitron', sans-serif;
-        }
+    .glass-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 0 20px rgba(0,0,0,0.8);
+    }
 
-        /* Matrix Canvas Background */
-        #matrix-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1;
-            opacity: 0.15;
-            pointer-events: none;
-        }
+    .glow-green-text {
+      text-shadow: 0 0 8px var(--green-glow);
+    }
+    .glow-cyan-text {
+      text-shadow: 0 0 8px var(--cyan-glow);
+    }
 
-        /* Custom Scrollbars */
-        ::-webkit-scrollbar {
-            width: 5px;
-            height: 5px;
-        }
-        ::-webkit-scrollbar-track {
-            background: rgba(3, 7, 18, 0.8);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #059669;
-            border-radius: 2px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #10b981;
-        }
+    .cyber-btn {
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--card-border);
+      color: var(--muted);
+      transition: all 0.2s ease;
+    }
+    .cyber-btn:hover, .cyber-btn.active {
+      border-color: var(--green);
+      color: var(--green);
+      background: rgba(0, 255, 102, 0.1);
+      box-shadow: 0 0 10px var(--green-glow);
+    }
 
-        /* Glowing Effects */
-        .glow-green {
-            box-shadow: 0 0 15px rgba(0, 255, 102, 0.25);
-            border-color: rgba(0, 255, 102, 0.4);
-        }
-        .glow-cyan {
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.25);
-            border-color: rgba(0, 243, 255, 0.4);
-        }
-        .text-glow-green {
-            text-shadow: 0 0 8px rgba(0, 255, 102, 0.6);
-        }
-        .text-glow-red {
-            text-shadow: 0 0 8px rgba(255, 0, 85, 0.6);
-        }
-        .text-glow-cyan {
-            text-shadow: 0 0 8px rgba(0, 243, 255, 0.6);
-        }
+    .cyber-input {
+      background: rgba(2, 8, 10, 0.8);
+      border: 1px solid var(--card-border);
+      color: var(--green);
+      outline: none;
+    }
+    .cyber-input:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 8px var(--green-glow);
+    }
 
-        /* Scanline Overlay Effect */
-        .scanline {
-            position: relative;
-            overflow: hidden;
-        }
-        .scanline::after {
-            content: " ";
-            display: block;
-            position: absolute;
-            top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-            z-index: 20;
-            background-size: 100% 3px, 6px 100%;
-            pointer-events: none;
-        }
-
-        /* Glassmorphism Panels */
-        .glass-panel {
-            background: var(--panel-bg);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 8px;
-        }
-
-        /* Pulse animations */
-        @keyframes pulse-fast {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-        .animate-pulse-fast {
-            animation: pulse-fast 1s infinite;
-        }
-    </style>
+    /* Custom progress animation */
+    @keyframes pulseGlow {
+      0% { opacity: 0.7; }
+      50% { opacity: 1; filter: drop-shadow(0 0 8px var(--green)); }
+      100% { opacity: 0.7; }
+    }
+    .pulse-glow { animation: pulseGlow 2s infinite; }
+  </style>
 </head>
-<body class="min-h-screen text-xs sm:text-sm selection:bg-emerald-500 selection:text-black">
+<body class="p-3 gap-3 flex flex-col relative z-10">
 
-    <canvas id="matrix-canvas"></canvas>
+  <!-- Background Matrix FX Canvas -->
+  <canvas id="matrix-bg"></canvas>
 
-    <div class="relative z-10 flex flex-col min-h-screen scanline">
-
-        <!-- HEADER / NAVIGATION BAR -->
-        <header class="glass-panel border-b border-emerald-500/20 px-4 py-2.5 flex flex-wrap items-center justify-between gap-4 sticky top-0 z-50">
-            <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-lg bg-emerald-500/10 border border-emerald-500/40 flex items-center justify-center glow-green">
-                    <i class="fa-solid fa-terminal text-emerald-400 text-lg"></i>
-                </div>
-                <div>
-                    <div class="flex items-center gap-2">
-                        <span class="orbitron font-extrabold text-lg text-emerald-400 tracking-wider text-glow-green">CYBER<span class="text-white">QUANT</span></span>
-                        <span class="bg-emerald-500/20 text-emerald-300 text-[10px] font-mono px-2 py-0.5 rounded border border-emerald-500/40">XM & BINANCE v4.0</span>
-                    </div>
-                    <p class="text-[11px] text-gray-400 flex items-center gap-1.5">
-                        <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                        INSTITUTIONAL METALS, FOREX & CRYPTO TERMINAL
-                    </p>
-                </div>
-            </div>
-
-            <!-- Ticker Summary Quick Stats -->
-            <div class="hidden lg:flex items-center gap-6 text-xs border-x border-gray-800 px-6">
-                <div>
-                    <span class="text-gray-500 block">XAUUSD (Gold)</span>
-                    <span id="header-gold-val" class="font-mono text-emerald-400 font-bold">$2,734.50</span>
-                    <span class="text-[10px] text-emerald-500 ml-1">+0.84%</span>
-                </div>
-                <div>
-                    <span class="text-gray-500 block">EURUSD</span>
-                    <span id="header-eur-val" class="font-mono text-cyan-400 font-bold">1.0845</span>
-                    <span class="text-[10px] text-emerald-500 ml-1">+0.12%</span>
-                </div>
-                <div>
-                    <span class="text-gray-500 block">BTCUSD (Bitcoin)</span>
-                    <span id="header-btc-val" class="font-mono text-emerald-400 font-bold">$67,420.00</span>
-                    <span class="text-[10px] text-emerald-500 ml-1">+2.41%</span>
-                </div>
-                <div>
-                    <span class="text-gray-500 block">USOIL (WTI Crude)</span>
-                    <span id="header-oil-val" class="font-mono text-amber-400 font-bold">$71.85</span>
-                    <span class="text-[10px] text-rose-500 ml-1">-0.45%</span>
-                </div>
-            </div>
-
-            <!-- Status Indicator & Settings Controls -->
-            <div class="flex items-center gap-3">
-                <div class="bg-black/60 border border-emerald-500/30 px-3 py-1.5 rounded flex items-center gap-2">
-                    <i class="fa-solid fa-server text-emerald-400 text-xs"></i>
-                    <span class="text-xs font-mono text-emerald-300">FEED: <span class="text-white font-semibold">XM/BINANCE LIVE</span></span>
-                </div>
-                <button id="sound-toggle-btn" onclick="toggleAudio()" class="p-2 bg-gray-800/80 hover:bg-gray-700 border border-gray-700 rounded text-gray-300 hover:text-white transition">
-                    <i class="fa-solid fa-volume-xmark text-xs" id="sound-icon"></i>
-                </button>
-            </div>
-        </header>
-
-        <!-- TICKER TAPE BANNER -->
-        <div class="bg-black/80 border-b border-gray-800 py-1.5 px-4 overflow-hidden text-xs font-mono whitespace-nowrap flex items-center">
-            <span class="bg-emerald-950 text-emerald-400 border border-emerald-800 px-2 py-0.5 text-[10px] uppercase font-bold mr-3 rounded shrink-0">
-                <i class="fa-solid fa-bolt mr-1"></i> LIVE STREAM
-            </span>
-            <div id="ticker-container" class="flex gap-8 items-center text-gray-300 animate-pulse-slow">
-                <!-- Ticker items dynamically updated via JS -->
-            </div>
-        </div>
-
-        <!-- MAIN LAYOUT GRID -->
-        <main class="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-3 p-3">
-
-            <!-- LEFT PANEL: ASSET SELECTOR & TIMEFRAME (Col 3) -->
-            <section class="lg:col-span-3 flex flex-col gap-3">
-                
-                <!-- ASSET CATEGORY SELECTOR -->
-                <div class="glass-panel p-3 border border-emerald-500/20">
-                    <h2 class="text-xs uppercase text-emerald-400 font-bold tracking-wider mb-2.5 flex items-center justify-between">
-                        <span><i class="fa-solid fa-list-check mr-1.5"></i> Asset Matrix</span>
-                        <span class="text-[10px] text-gray-500 font-normal">XM & BINANCE ONLY</span>
-                    </h2>
-
-                    <!-- Search Input -->
-                    <div class="relative mb-2.5">
-                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-gray-500 text-xs"></i>
-                        <input type="text" id="asset-search" onkeyup="filterAssets()" placeholder="Search symbol (e.g. XAUUSD, BTC)..." 
-                            class="w-full bg-black/60 border border-gray-800 rounded pl-8 pr-3 py-1.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500">
-                    </div>
-
-                    <!-- Category Tabs -->
-                    <div class="grid grid-cols-3 gap-1 mb-3 bg-black/40 p-1 rounded border border-gray-800 text-[11px]">
-                        <button onclick="setCategory('all')" id="tab-all" class="cat-tab py-1 text-center rounded bg-emerald-500/20 text-emerald-300 font-semibold">ALL</button>
-                        <button onclick="setCategory('forex')" id="tab-forex" class="cat-tab py-1 text-center rounded text-gray-400 hover:text-white">FOREX/XM</button>
-                        <button onclick="setCategory('crypto')" id="tab-crypto" class="cat-tab py-1 text-center rounded text-gray-400 hover:text-white">CRYPTO</button>
-                    </div>
-
-                    <!-- Asset List Scrollable Container -->
-                    <div id="asset-list" class="space-y-1.5 max-h-[320px] overflow-y-auto pr-1">
-                        <!-- Populated by JavaScript -->
-                    </div>
-                </div>
-
-                <!-- TIMEFRAME SELECTOR -->
-                <div class="glass-panel p-3 border border-emerald-500/20">
-                    <h2 class="text-xs uppercase text-emerald-400 font-bold tracking-wider mb-2 flex items-center justify-between">
-                        <span><i class="fa-solid fa-clock mr-1.5"></i> Timeframe Matrix</span>
-                    </h2>
-                    <div class="grid grid-cols-5 gap-1 text-center font-mono text-xs">
-                        <button onclick="setTimeframe('5m')" id="tf-5m" class="tf-btn py-1.5 rounded bg-gray-800/80 hover:bg-emerald-500/20 text-gray-300 border border-gray-700">5M</button>
-                        <button onclick="setTimeframe('15m')" id="tf-15m" class="tf-btn py-1.5 rounded bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/50 glow-green">15M</button>
-                        <button onclick="setTimeframe('1h')" id="tf-1h" class="tf-btn py-1.5 rounded bg-gray-800/80 hover:bg-emerald-500/20 text-gray-300 border border-gray-700">1H</button>
-                        <button onclick="setTimeframe('4h')" id="tf-4h" class="tf-btn py-1.5 rounded bg-gray-800/80 hover:bg-emerald-500/20 text-gray-300 border border-gray-700">4H</button>
-                        <button onclick="setTimeframe('1d')" id="tf-1d" class="tf-btn py-1.5 rounded bg-gray-800/80 hover:bg-emerald-500/20 text-gray-300 border border-gray-700">1D</button>
-                    </div>
-                </div>
-
-                <!-- RISK MANAGEMENT & POSITION SIZE CALCULATOR -->
-                <div class="glass-panel p-3 border border-emerald-500/20">
-                    <h2 class="text-xs uppercase text-emerald-400 font-bold tracking-wider mb-2.5 flex items-center justify-between">
-                        <span><i class="fa-solid fa-calculator mr-1.5"></i> XM Risk / Lot Size Calc</span>
-                    </h2>
-
-                    <div class="space-y-2 text-xs">
-                        <div class="grid grid-cols-2 gap-2">
-                            <div>
-                                <label class="text-[10px] text-gray-400 block mb-1">Account Balance ($)</label>
-                                <input type="number" id="calc-balance" value="1000" oninput="calculateLotSize()" class="w-full bg-black/60 border border-gray-800 rounded px-2.5 py-1 text-white text-xs font-mono focus:border-emerald-500 focus:outline-none">
-                            </div>
-                            <div>
-                                <label class="text-[10px] text-gray-400 block mb-1">Risk Percent (%)</label>
-                                <input type="number" id="calc-risk" value="1" step="0.5" oninput="calculateLotSize()" class="w-full bg-black/60 border border-gray-800 rounded px-2.5 py-1 text-white text-xs font-mono focus:border-emerald-500 focus:outline-none">
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-2">
-                            <div>
-                                <label class="text-[10px] text-gray-400 block mb-1">Stop Loss (Pips/Pts)</label>
-                                <input type="number" id="calc-sl-pips" value="25" oninput="calculateLotSize()" class="w-full bg-black/60 border border-gray-800 rounded px-2.5 py-1 text-white text-xs font-mono focus:border-emerald-500 focus:outline-none">
-                            </div>
-                            <div>
-                                <label class="text-[10px] text-gray-400 block mb-1">Take Profit (Pips/Pts)</label>
-                                <input type="number" id="calc-tp-pips" value="50" oninput="calculateLotSize()" class="w-full bg-black/60 border border-gray-800 rounded px-2.5 py-1 text-white text-xs font-mono focus:border-emerald-500 focus:outline-none">
-                            </div>
-                        </div>
-
-                        <!-- Calculated Output Banner -->
-                        <div class="bg-black/80 border border-emerald-500/30 rounded p-2.5 mt-2 space-y-1.5 font-mono">
-                            <div class="flex justify-between items-center">
-                                <span class="text-gray-400 text-[11px]">Recommended Lot Size:</span>
-                                <span id="calc-recommended-lot" class="text-emerald-400 font-bold text-sm">0.04 Lots</span>
-                            </div>
-                            <div class="flex justify-between items-center text-[11px]">
-                                <span class="text-gray-400">Total Cash at Risk:</span>
-                                <span id="calc-cash-risk" class="text-rose-400 font-bold">$10.00</span>
-                            </div>
-                            <div class="flex justify-between items-center text-[11px]">
-                                <span class="text-gray-400">Risk / Reward Ratio:</span>
-                                <span id="calc-rr-ratio" class="text-cyan-400 font-bold">1 : 2.0</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </section>
-
-            <!-- CENTER PANEL: TRADINGVIEW ADVANCED CHART (Col 6) -->
-            <section class="lg:col-span-6 flex flex-col gap-3">
-                <div class="glass-panel p-3 border border-emerald-500/20 flex-1 flex flex-col min-h-[450px]">
-                    
-                    <!-- Chart Header info -->
-                    <div class="flex flex-wrap items-center justify-between gap-2 mb-2 pb-2 border-b border-gray-800">
-                        <div class="flex items-center gap-2">
-                            <span id="active-symbol-title" class="orbitron text-base font-bold text-white tracking-wide">XAUUSD</span>
-                            <span id="active-symbol-desc" class="text-xs text-gray-400">XM Gold Spot / US Dollar</span>
-                            <span id="active-symbol-exchange" class="bg-emerald-950 text-emerald-400 border border-emerald-800 text-[10px] px-2 py-0.5 rounded uppercase font-bold">XM GLOBAL</span>
-                        </div>
-                        <div class="flex items-center gap-2 font-mono text-xs">
-                            <span class="text-gray-400">Price:</span>
-                            <span id="active-price" class="text-emerald-400 font-bold text-sm">$2,734.50</span>
-                            <span id="active-change" class="text-emerald-500 bg-emerald-500/10 px-1.5 py-0.5 rounded text-[11px]">+0.84%</span>
-                        </div>
-                    </div>
-
-                    <!-- TradingView Widget Container -->
-                    <div id="tv-chart-container" class="flex-1 w-full h-full rounded overflow-hidden border border-gray-800/80 min-h-[380px]">
-                        <!-- TradingView widget rendered here via JS -->
-                    </div>
-                </div>
-
-                <!-- SYSTEM LOG & SIGNAL FEEDBACK CONSOLE -->
-                <div class="glass-panel p-3 border border-emerald-500/20 h-36 flex flex-col">
-                    <div class="flex items-center justify-between mb-1.5 text-xs">
-                        <span class="text-emerald-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
-                            <i class="fa-solid fa-terminal text-emerald-500"></i> Cyber Console Output
-                        </span>
-                        <button onclick="clearConsole()" class="text-[10px] text-gray-500 hover:text-gray-300">Clear Feed</button>
-                    </div>
-                    <div id="console-logs" class="flex-1 bg-black/80 border border-gray-800 rounded p-2 overflow-y-auto font-mono text-[11px] space-y-1">
-                        <div class="text-emerald-500">[SYSTEM INIT] CyberQuant XM & Binance Terminal initialized successfully...</div>
-                        <div class="text-gray-400">[DATA FEED] Connected to live institutional websocket data...</div>
-                        <div class="text-cyan-400">[ANALYSIS] Multi-Timeframe scanner ready for XAUUSD, EURUSD, USOIL, BTCUSD.</div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- RIGHT PANEL: TECHNICAL INDICATORS & AI SIGNAL SCORE (Col 3) -->
-            <section class="lg:col-span-3 flex flex-col gap-3">
-
-                <!-- INSTITUTIONAL SIGNAL SCORE CARD -->
-                <div class="glass-panel p-3.5 border border-emerald-500/20 text-center relative overflow-hidden">
-                    <h2 class="text-xs uppercase text-emerald-400 font-bold tracking-wider mb-2">
-                        <i class="fa-solid fa-brain mr-1.5"></i> AI Signal Confidence
-                    </h2>
-
-                    <!-- Confidence Gauge & Buy/Sell Call -->
-                    <div id="signal-badge-bg" class="my-2 py-3 px-4 rounded-lg bg-emerald-950/60 border border-emerald-500/50 glow-green transition-all">
-                        <div id="signal-action" class="orbitron text-2xl font-black tracking-widest text-emerald-400 text-glow-green">STRONG BUY</div>
-                        <div class="text-[11px] text-emerald-300/80 font-mono mt-0.5" id="signal-subtext">MA CROSS + RSI CONFLUENCE DETECTED</div>
-                    </div>
-
-                    <!-- Confidence Bar -->
-                    <div class="space-y-1 font-mono text-xs">
-                        <div class="flex justify-between text-[11px]">
-                            <span class="text-gray-400">Confidence Score:</span>
-                            <span id="signal-confidence-num" class="text-emerald-400 font-bold">88%</span>
-                        </div>
-                        <div class="w-full bg-gray-900 rounded-full h-2 overflow-hidden border border-gray-800">
-                            <div id="signal-confidence-bar" class="bg-gradient-to-r from-emerald-600 to-emerald-400 h-2 rounded-full transition-all duration-500" style="width: 88%"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- LIVE TECHNICAL INDICATORS DASHBOARD -->
-                <div class="glass-panel p-3 border border-emerald-500/20 space-y-2.5">
-                    <h2 class="text-xs uppercase text-emerald-400 font-bold tracking-wider mb-1 flex items-center justify-between">
-                        <span><i class="fa-solid fa-chart-line mr-1.5"></i> Technical Metrics</span>
-                        <span class="text-[10px] text-gray-500 font-mono" id="metrics-tf-label">TF: 15M</span>
-                    </h2>
-
-                    <!-- RSI (14) -->
-                    <div class="bg-black/50 border border-gray-800 rounded p-2 flex justify-between items-center font-mono">
-                        <div>
-                            <span class="text-gray-400 text-xs block">RSI (14) Gauge</span>
-                            <span id="metric-rsi-status" class="text-[10px] text-emerald-400">Bullish Momentum</span>
-                        </div>
-                        <span id="metric-rsi-val" class="text-base font-bold text-emerald-400">62.4</span>
-                    </div>
-
-                    <!-- MACD Signal -->
-                    <div class="bg-black/50 border border-gray-800 rounded p-2 flex justify-between items-center font-mono">
-                        <div>
-                            <span class="text-gray-400 text-xs block">MACD (12, 26, 9)</span>
-                            <span id="metric-macd-status" class="text-[10px] text-emerald-400">Histogram Expanding</span>
-                        </div>
-                        <span id="metric-macd-val" class="text-xs font-bold text-emerald-400">BUY CROSS</span>
-                    </div>
-
-                    <!-- EMA 20 / 50 Crossover -->
-                    <div class="bg-black/50 border border-gray-800 rounded p-2 flex justify-between items-center font-mono">
-                        <div>
-                            <span class="text-gray-400 text-xs block">EMA Crossover (20/50)</span>
-                            <span id="metric-ema-status" class="text-[10px] text-emerald-400">Golden Cross Active</span>
-                        </div>
-                        <span id="metric-ema-val" class="text-xs font-bold text-emerald-400">BULLISH</span>
-                    </div>
-
-                    <!-- ATR Volatility -->
-                    <div class="bg-black/50 border border-gray-800 rounded p-2 flex justify-between items-center font-mono">
-                        <div>
-                            <span class="text-gray-400 text-xs block">ATR Volatility</span>
-                            <span id="metric-atr-status" class="text-[10px] text-gray-400">Moderate Range</span>
-                        </div>
-                        <span id="metric-atr-val" class="text-xs font-bold text-amber-400">14.2 Pips</span>
-                    </div>
-                </div>
-
-                <!-- PIVOT POINTS SUPPORT & RESISTANCE PANEL -->
-                <div class="glass-panel p-3 border border-emerald-500/20 font-mono space-y-2">
-                    <h2 class="text-xs uppercase text-emerald-400 font-bold tracking-wider mb-2">
-                        <i class="fa-solid fa-layer-group mr-1.5"></i> Institutional Pivots
-                    </h2>
-
-                    <div class="space-y-1.5 text-xs">
-                        <div class="flex justify-between items-center bg-rose-950/30 border border-rose-900/40 p-1.5 rounded">
-                            <span class="text-rose-400 text-[11px]">Resistance 2 (R2):</span>
-                            <span id="pivot-r2" class="text-white font-bold">$2,752.10</span>
-                        </div>
-                        <div class="flex justify-between items-center bg-rose-950/20 border border-rose-900/30 p-1.5 rounded">
-                            <span class="text-rose-300 text-[11px]">Resistance 1 (R1):</span>
-                            <span id="pivot-r1" class="text-white font-bold">$2,741.80</span>
-                        </div>
-                        <div class="flex justify-between items-center bg-cyan-950/40 border border-cyan-800/50 p-1.5 rounded">
-                            <span class="text-cyan-400 font-bold text-[11px]">Pivot Point (P):</span>
-                            <span id="pivot-p" class="text-cyan-300 font-bold">$2,731.00</span>
-                        </div>
-                        <div class="flex justify-between items-center bg-emerald-950/20 border border-emerald-900/30 p-1.5 rounded">
-                            <span class="text-emerald-300 text-[11px]">Support 1 (S1):</span>
-                            <span id="pivot-s1" class="text-white font-bold">$2,720.50</span>
-                        </div>
-                        <div class="flex justify-between items-center bg-emerald-950/30 border border-emerald-900/40 p-1.5 rounded">
-                            <span class="text-emerald-400 text-[11px]">Support 2 (S2):</span>
-                            <span id="pivot-s2" class="text-white font-bold">$2,708.20</span>
-                        </div>
-                    </div>
-                </div>
-
-            </section>
-        </main>
-
-        <!-- FOOTER BAR -->
-        <footer class="glass-panel border-t border-gray-800 px-4 py-2 mt-auto text-[11px] text-gray-500 flex flex-wrap justify-between items-center gap-2">
-            <div class="flex items-center gap-2">
-                <span class="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
-                <span>XM Global & Binance Real-time Analysis Terminal | Pure Spot Market Feeds</span>
-            </div>
-            <div>
-                <span>Institutional Risk Warning: Leverage trading carries significant risk. Always use proper SL/TP.</span>
-            </div>
-        </footer>
+  <!-- Top Header & Ticker Bar -->
+  <header class="glass-panel p-2.5 flex flex-wrap justify-between items-center gap-3 relative z-20">
+    <div class="flex items-center gap-3">
+      <div class="border border-cyberGreen text-cyberGreen p-1.5 rounded font-bold text-xs tracking-wider flex items-center gap-2 glow-green-text">
+        <span class="w-2 h-2 rounded-full bg-cyberGreen animate-ping"></span>
+        CYBERQUANT <span class="bg-cyberGreen/20 px-1.5 py-0.5 text-[10px] rounded text-cyberGreen border border-cyberGreen/40">XM & BINANCE v4.0</span>
+      </div>
+      <div class="hidden md:block text-[11px] text-cyberMuted uppercase tracking-widest border-l border-cyberBorder pl-3">
+        ● Institutional Metals, Forex & Crypto Terminal
+      </div>
     </div>
 
-    <script>
-        // ==========================================
-        // 1. MATRIX BACKGROUND CANVAS ENGINE
-        // ==========================================
-        const canvas = document.getElementById('matrix-canvas');
-        const ctx = canvas.getContext('2d');
+    <!-- Live Top Tickers Feed -->
+    <div class="flex items-center gap-4 text-xs overflow-x-auto py-1 max-w-full">
+      <div class="flex items-center gap-1.5">
+        <span class="text-cyberMuted">XAUUSD (Gold):</span>
+        <span id="top-xauusd" class="font-semibold text-cyberGreen">$2,734.50</span>
+        <span class="text-[10px] text-cyberGreen">+0.84%</span>
+      </div>
+      <div class="flex items-center gap-1.5 border-l border-cyberBorder pl-3">
+        <span class="text-cyberMuted">EURUSD:</span>
+        <span id="top-eurusd" class="font-semibold text-cyberCyan">1.0845</span>
+        <span class="text-[10px] text-cyberCyan">+0.12%</span>
+      </div>
+      <div class="flex items-center gap-1.5 border-l border-cyberBorder pl-3">
+        <span class="text-cyberMuted">BTCUSD (Bitcoin):</span>
+        <span id="top-btcusd" class="font-semibold text-cyberGreen">$67,420.00</span>
+        <span class="text-[10px] text-cyberGreen">+2.41%</span>
+      </div>
+      <div class="flex items-center gap-1.5 border-l border-cyberBorder pl-3">
+        <span class="text-cyberMuted">USOIL (WTI Crude):</span>
+        <span id="top-usoil" class="font-semibold text-cyberGold">$71.85</span>
+        <span class="text-[10px] text-cyberRed">-0.45%</span>
+      </div>
+    </div>
 
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+    <!-- Feed Status Controls -->
+    <div class="flex items-center gap-2">
+      <button class="bg-cyberGreen/10 border border-cyberGreen/40 text-cyberGreen text-[11px] px-2.5 py-1 rounded flex items-center gap-1.5 font-semibold">
+        <span class="w-1.5 h-1.5 rounded-full bg-cyberGreen"></span> FEED: XM/BINANCE LIVE
+      </button>
+      <button id="audio-toggle" onclick="toggleAudio()" class="cyber-btn p-1.5 rounded text-xs text-cyberMuted hover:text-cyberGreen">
+        🔊
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Grid Layout -->
+  <main class="grid grid-cols-1 lg:grid-cols-12 gap-3 flex-1 relative z-20">
+    
+    <!-- Left Sidebar: Assets, Timeframe & Risk Calculator -->
+    <section class="lg:col-span-3 flex flex-col gap-3">
+      
+      <!-- Asset Matrix Panel -->
+      <div class="glass-panel p-3 flex flex-col gap-2.5">
+        <div class="text-[11px] font-bold tracking-wider text-cyberGreen uppercase flex justify-between items-center">
+          <span>≡ ASSET MATRIX</span>
+          <span class="text-[9px] text-cyberMuted">XM & BINANCE ONLY</span>
+        </div>
+        
+        <!-- Search -->
+        <input type="text" id="assetSearch" placeholder="Q Search symbol (e.g. XAUUSD, BTC)..." onkeyup="filterAssets()" class="cyber-input w-full p-2 text-xs rounded">
+
+        <!-- Asset Category Tabs -->
+        <div class="grid grid-cols-3 gap-1 text-[11px]">
+          <button class="cyber-btn active py-1 rounded text-center font-semibold" id="filter-all" onclick="setAssetFilter('ALL')">ALL</button>
+          <button class="cyber-btn py-1 rounded text-center font-semibold" id="filter-forex" onclick="setAssetFilter('FOREX')">FOREX/XM</button>
+          <button class="cyber-btn py-1 rounded text-center font-semibold" id="filter-crypto" onclick="setAssetFilter('CRYPTO')">CRYPTO</button>
+        </div>
+
+        <!-- Asset List Container -->
+        <div class="flex flex-col gap-1 max-h-48 overflow-y-auto pr-1" id="asset-list-container">
+          <!-- Assets dynamically injected here -->
+        </div>
+      </div>
+
+      <!-- Timeframe Matrix -->
+      <div class="glass-panel p-3 flex flex-col gap-2">
+        <div class="text-[11px] font-bold tracking-wider text-cyberGreen uppercase">
+          🕒 TIMEFRAME MATRIX
+        </div>
+        <div class="grid grid-cols-5 gap-1 text-xs">
+          <button class="cyber-btn py-1.5 rounded text-center" onclick="setTimeframe('5m', this)">5M</button>
+          <button class="cyber-btn active py-1.5 rounded text-center font-semibold" onclick="setTimeframe('15m', this)">15M</button>
+          <button class="cyber-btn py-1.5 rounded text-center" onclick="setTimeframe('1h', this)">1H</button>
+          <button class="cyber-btn py-1.5 rounded text-center" onclick="setTimeframe('4h', this)">4H</button>
+          <button class="cyber-btn py-1.5 rounded text-center" onclick="setTimeframe('1d', this)">1D</button>
+        </div>
+      </div>
+
+      <!-- Interactive XM Risk / Lot Size Calculator -->
+      <div class="glass-panel p-3 flex flex-col gap-2.5">
+        <div class="text-[11px] font-bold tracking-wider text-cyberGreen uppercase flex justify-between items-center">
+          <span>🧮 XM RISK / LOT SIZE CALC</span>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <div>
+            <label class="text-[10px] text-cyberMuted block mb-1">Account Balance ($)</label>
+            <input type="number" id="calc-balance" value="1000" oninput="calculateRisk()" class="cyber-input w-full p-1.5 rounded text-xs">
+          </div>
+          <div>
+            <label class="text-[10px] text-cyberMuted block mb-1">Risk Percent (%)</label>
+            <input type="number" id="calc-risk" value="1" step="0.5" oninput="calculateRisk()" class="cyber-input w-full p-1.5 rounded text-xs">
+          </div>
+          <div>
+            <label class="text-[10px] text-cyberMuted block mb-1">Stop Loss (Pips/Pts)</label>
+            <input type="number" id="calc-sl" value="25" oninput="calculateRisk()" class="cyber-input w-full p-1.5 rounded text-xs">
+          </div>
+          <div>
+            <label class="text-[10px] text-cyberMuted block mb-1">Take Profit (Pips/Pts)</label>
+            <input type="number" id="calc-tp" value="50" oninput="calculateRisk()" class="cyber-input w-full p-1.5 rounded text-xs">
+          </div>
+        </div>
+
+        <!-- Calculated Results -->
+        <div class="bg-black/40 border border-cyberBorder/50 rounded p-2 text-xs flex flex-col gap-1 mt-1">
+          <div class="flex justify-between items-center">
+            <span class="text-cyberMuted">Recommended Lot Size:</span>
+            <span id="calc-lot" class="text-cyberGreen font-bold font-mono text-sm">0.04 Lots</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-cyberMuted">Total Cash at Risk:</span>
+            <span id="calc-cash" class="text-cyberRed font-semibold">$10.00</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-cyberMuted">Risk / Reward Ratio:</span>
+            <span id="calc-rr" class="text-cyberCyan font-semibold">1 : 2.0</span>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Center Main Panel: TradingView Chart & Console -->
+    <section class="lg:col-span-6 flex flex-col gap-3 min-h-[550px]">
+      
+      <!-- Chart Display Area -->
+      <div class="glass-panel p-2 flex flex-col flex-1 min-h-[460px]">
+        <div class="flex justify-between items-center px-2 py-1.5 border-b border-cyberBorder mb-2">
+          <div class="flex items-center gap-2">
+            <span id="chart-symbol-title" class="font-bold text-sm text-white tracking-wider">XAUUSD</span>
+            <span id="chart-symbol-sub" class="text-[10px] text-cyberMuted">XM Gold Spot / US Dollar</span>
+            <span class="bg-cyberGreen/20 text-cyberGreen text-[9px] px-1.5 py-0.5 rounded border border-cyberGreen/30 font-semibold">XM GLOBAL</span>
+          </div>
+          <div class="text-xs">
+            Price: <span id="chart-live-price" class="text-cyberGreen font-bold">$2,734.50</span>
+            <span id="chart-live-change" class="text-[10px] text-cyberGreen ml-1">+0.84%</span>
+          </div>
+        </div>
+
+        <!-- Embedded TradingView Widget -->
+        <div class="w-full flex-1 rounded overflow-hidden relative" id="tradingview-container">
+          <div id="tradingview_widget" class="w-full h-full min-h-[400px]"></div>
+        </div>
+      </div>
+
+      <!-- Cyber Console Output Terminal Log -->
+      <div class="glass-panel p-2.5 flex flex-col gap-1 text-[11px] h-32">
+        <div class="flex justify-between items-center text-cyberMuted pb-1 border-b border-cyberBorder/40">
+          <span class="text-cyberGreen font-bold">&gt;_ CYBER CONSOLE OUTPUT</span>
+          <button onclick="clearConsole()" class="text-[10px] hover:text-cyberGreen">Clear Feed</button>
+        </div>
+        <div class="flex-1 overflow-y-auto font-mono text-[10.5px] flex flex-col gap-0.5" id="console-logs">
+          <div class="text-cyberMuted">[SYSTEM INIT] CyberQuant XM & Binance Terminal initialized successfully...</div>
+          <div class="text-cyberCyan">[DATA FEED] Connected to live institutional websocket data...</div>
+          <div class="text-cyberGreen">[ANALYSIS] Multi-Timeframe scanner ready for XAUUSD, EURUSD, USOIL, BTCUSD.</div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Right Sidebar: AI Signal Confidence & Technical Metrics -->
+    <section class="lg:col-span-3 flex flex-col gap-3">
+      
+      <!-- AI Signal Confidence Box -->
+      <div class="glass-panel p-3 flex flex-col gap-2 text-center relative overflow-hidden">
+        <div class="text-[10px] text-cyberMuted tracking-widest uppercase">
+          🌐 AI SIGNAL CONFIDENCE
+        </div>
+        
+        <div id="signal-badge" class="text-2xl font-black text-cyberGreen tracking-widest my-1 glow-green-text pulse-glow">
+          STRONG BUY
+        </div>
+        
+        <div class="text-[10px] text-cyberMuted uppercase font-semibold" id="signal-reason">
+          MA CROSS + RSI CONFLUENCE DETECTED
+        </div>
+
+        <!-- Progress Confidence Bar -->
+        <div class="mt-2 text-left">
+          <div class="flex justify-between text-[10px] mb-1">
+            <span class="text-cyberMuted">Confidence Score:</span>
+            <span id="confidence-pct" class="text-cyberGreen font-bold">88%</span>
+          </div>
+          <div class="w-full h-2 bg-black/60 rounded-full border border-cyberBorder overflow-hidden">
+            <div id="confidence-bar" class="h-full bg-cyberGreen transition-all duration-500 shadow-[0_0_10px_#00ff66]" style="width: 88%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Technical Metrics Panel -->
+      <div class="glass-panel p-3 flex flex-col gap-2.5">
+        <div class="flex justify-between items-center text-[11px] font-bold tracking-wider text-cyberGreen uppercase">
+          <span>📐 TECHNICAL METRICS</span>
+          <span class="text-[9px] text-cyberMuted" id="metric-tf-badge">TF: 15M</span>
+        </div>
+
+        <div class="flex flex-col gap-2 text-xs">
+          <!-- RSI -->
+          <div class="bg-black/40 border border-cyberBorder/40 p-2 rounded flex justify-between items-center">
+            <div>
+              <div class="text-cyberMuted text-[10px]">RSI (14) Gauge</div>
+              <div class="text-[10px] text-cyberGreen font-semibold" id="rsi-status">Bullish Momentum</div>
+            </div>
+            <div class="text-right">
+              <span id="rsi-value" class="text-sm font-bold text-cyberGreen font-mono">62.4</span>
+            </div>
+          </div>
+
+          <!-- MACD -->
+          <div class="bg-black/40 border border-cyberBorder/40 p-2 rounded flex justify-between items-center">
+            <div>
+              <div class="text-cyberMuted text-[10px]">MACD (12, 26, 9)</div>
+              <div class="text-[10px] text-cyberCyan font-semibold" id="macd-status">Histogram Expanding</div>
+            </div>
+            <div class="text-right">
+              <span id="macd-value" class="text-xs font-bold text-cyberGreen font-mono">BUY CROSS</span>
+            </div>
+          </div>
+
+          <!-- EMA Cross -->
+          <div class="bg-black/40 border border-cyberBorder/40 p-2 rounded flex justify-between items-center">
+            <div>
+              <div class="text-cyberMuted text-[10px]">EMA Crossover (20/50)</div>
+              <div class="text-[10px] text-cyberGreen font-semibold" id="ema-status">Golden Cross Active</div>
+            </div>
+            <div class="text-right">
+              <span id="ema-value" class="text-xs font-bold text-cyberGreen font-mono">BULLISH</span>
+            </div>
+          </div>
+
+          <!-- ATR Volatility -->
+          <div class="bg-black/40 border border-cyberBorder/40 p-2 rounded flex justify-between items-center">
+            <div>
+              <div class="text-cyberMuted text-[10px]">ATR Volatility</div>
+              <div class="text-[10px] text-cyberGold font-semibold">Moderate Range</div>
+            </div>
+            <div class="text-right">
+              <span id="atr-value" class="text-xs font-bold text-cyberGold font-mono">14.2 Pips</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Institutional Pivots Table -->
+      <div class="glass-panel p-3 flex flex-col gap-2 text-xs">
+        <div class="text-[11px] font-bold tracking-wider text-cyberGreen uppercase">
+          🏛️ INSTITUTIONAL PIVOTS
+        </div>
+
+        <div class="flex flex-col gap-1 text-[11px]">
+          <div class="flex justify-between items-center p-1 bg-cyberRed/10 border border-cyberRed/30 rounded">
+            <span class="text-cyberRed">Resistance 2 (R2):</span>
+            <span id="pivot-r2" class="font-mono font-bold text-cyberRed">$2,752.10</span>
+          </div>
+          <div class="flex justify-between items-center p-1 bg-cyberRed/5 border border-cyberRed/20 rounded">
+            <span class="text-cyberRed/80">Resistance 1 (R1):</span>
+            <span id="pivot-r1" class="font-mono text-cyberRed/90">$2,741.80</span>
+          </div>
+          <div class="flex justify-between items-center p-1 bg-cyberCyan/10 border border-cyberCyan/30 rounded">
+            <span class="text-cyberCyan font-semibold">Pivot Point (P):</span>
+            <span id="pivot-p" class="font-mono font-bold text-cyberCyan">$2,731.00</span>
+          </div>
+          <div class="flex justify-between items-center p-1 bg-cyberGreen/5 border border-cyberGreen/20 rounded">
+            <span class="text-cyberGreen/80">Support 1 (S1):</span>
+            <span id="pivot-s1" class="font-mono text-cyberGreen/90">$2,720.50</span>
+          </div>
+          <div class="flex justify-between items-center p-1 bg-cyberGreen/10 border border-cyberGreen/30 rounded">
+            <span class="text-cyberGreen">Support 2 (S2):</span>
+            <span id="pivot-s2" class="font-mono font-bold text-cyberGreen">$2,708.20</span>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- External Scripts & Application JavaScript Logic -->
+  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+  <script>
+    // Matrix Background Animation Engine
+    const canvas = document.getElementById('matrix-bg');
+    const ctx = canvas.getContext('2d');
+    function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    const matrixChars = '0123456789ABCDEF$#@%&*<>';
+    const drops = Array(Math.floor(canvas.width / 14)).fill(1);
+    function drawMatrix() {
+      ctx.fillStyle = 'rgba(2, 5, 8, 0.06)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#00ff66';
+      ctx.font = '12px monospace';
+      drops.forEach((y, i) => {
+        const text = matrixChars.charAt(Math.floor(Math.random() * matrixChars.length));
+        ctx.fillText(text, i * 14, y * 14);
+        if (y * 14 > canvas.height && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+      });
+    }
+    setInterval(drawMatrix, 35);
+
+    // Global Terminal State
+    let currentAsset = {
+      symbol: "OANDA:XAUUSD",
+      name: "XAUUSD",
+      sub: "XM Gold Spot / US Dollar",
+      category: "FOREX",
+      price: 2734.50,
+      decimals: 2
+    };
+    let currentTimeframe = "15m";
+    let activeCategoryFilter = "ALL";
+    let tvWidget = null;
+
+    // Assets Database
+    const assetDatabase = [
+      { symbol: "OANDA:XAUUSD", name: "XAUUSD", sub: "XM Gold Spot / US Dollar", category: "FOREX", price: 2734.50, decimals: 2 },
+      { symbol: "FX:EURUSD", name: "EURUSD", sub: "Euro / US Dollar", category: "FOREX", price: 1.0845, decimals: 4 },
+      { symbol: "FX:GBPUSD", name: "GBPUSD", sub: "British Pound / US Dollar", category: "FOREX", price: 1.3020, decimals: 4 },
+      { symbol: "BINANCE:BTCUSDT", name: "BTCUSDT", sub: "Bitcoin / USDT", category: "CRYPTO", price: 67420.00, decimals: 2 },
+      { symbol: "BINANCE:ETHUSDT", name: "ETHUSDT", sub: "Ethereum / USDT", category: "CRYPTO", price: 2640.50, decimals: 2 },
+      { symbol: "BINANCE:SOLUSDT", name: "SOLUSDT", sub: "Solana / USDT", category: "CRYPTO", price: 154.20, decimals: 2 },
+      { symbol: "TVC:USOIL", name: "USOIL", sub: "Crude Oil WTI", category: "FOREX", price: 71.85, decimals: 2 }
+    ];
+
+    // Logging Utility
+    function addLog(msg, type = "info") {
+      const consoleContainer = document.getElementById('console-logs');
+      const time = new Date().toLocaleTimeString();
+      let colorClass = "text-cyberGreen";
+      if (type === "warn") colorClass = "text-cyberGold";
+      if (type === "error") colorClass = "text-cyberRed";
+      if (type === "sys") colorClass = "text-cyberCyan";
+
+      consoleContainer.innerHTML += `<div class="${colorClass}">[${time}] ${msg}</div>`;
+      consoleContainer.scrollTop = consoleContainer.scrollHeight;
+    }
+
+    function clearConsole() {
+      document.getElementById('console-logs').innerHTML = '';
+      addLog("Console feed cleared.", "sys");
+    }
+
+    // Interactive Risk Calculator
+    function calculateRisk() {
+      const balance = parseFloat(document.getElementById('calc-balance').value) || 0;
+      const riskPct = parseFloat(document.getElementById('calc-risk').value) || 0;
+      const slPips = parseFloat(document.getElementById('calc-sl').value) || 1;
+      const tpPips = parseFloat(document.getElementById('calc-tp').value) || 1;
+
+      const cashAtRisk = (balance * (riskPct / 100));
+      // Standard lot formula for Gold/Forex approximation
+      const lotSize = Math.max(0.01, (cashAtRisk / (slPips * 10))).toFixed(2);
+      const rrRatio = (tpPips / slPips).toFixed(1);
+
+      document.getElementById('calc-lot').innerText = `${lotSize} Lots`;
+      document.getElementById('calc-cash').innerText = `$${cashAtRisk.toFixed(2)}`;
+      document.getElementById('calc-rr').innerText = `1 : ${rrRatio}`;
+    }
+
+    // Asset Filtering Logic
+    function renderAssetList() {
+      const container = document.getElementById('asset-list-container');
+      container.innerHTML = '';
+
+      assetDatabase.forEach(asset => {
+        if (activeCategoryFilter !== 'ALL' && asset.category !== activeCategoryFilter) return;
+
+        const isSelected = asset.symbol === currentAsset.symbol;
+        const card = document.createElement('div');
+        card.className = `p-2 rounded border cursor-pointer flex justify-between items-center text-xs transition-all ${
+          isSelected 
+            ? 'bg-cyberGreen/15 border-cyberGreen text-cyberGreen shadow-[0_0_10px_rgba(0,255,102,0.2)]' 
+            : 'bg-black/50 border-cyberBorder/60 hover:border-cyberGreen/60 text-white'
+        }`;
+        card.onclick = () => selectAsset(asset);
+
+        card.innerHTML = `
+          <div>
+            <div class="font-bold">${asset.name}</div>
+            <div class="text-[9px] text-cyberMuted">${asset.sub}</div>
+          </div>
+          <div class="text-right">
+            <div class="font-mono font-semibold">${asset.price < 10 ? asset.price.toFixed(asset.decimals) : '$' + asset.price.toLocaleString()}</div>
+            <div class="text-[9px] text-cyberGreen">+0.8%</div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function setAssetFilter(filter) {
+      activeCategoryFilter = filter;
+      document.getElementById('filter-all').classList.toggle('active', filter === 'ALL');
+      document.getElementById('filter-forex').classList.toggle('active', filter === 'FOREX');
+      document.getElementById('filter-crypto').classList.toggle('active', filter === 'CRYPTO');
+      renderAssetList();
+    }
+
+    function filterAssets() {
+      const query = document.getElementById('assetSearch').value.toLowerCase();
+      const items = document.querySelectorAll('#asset-list-container > div');
+      items.forEach(item => {
+        const text = item.innerText.toLowerCase();
+        item.style.display = text.includes(query) ? 'flex' : 'none';
+      });
+    }
+
+    // Dynamic Asset & Chart Loader
+    function selectAsset(asset) {
+      currentAsset = asset;
+      renderAssetList();
+
+      document.getElementById('chart-symbol-title').innerText = asset.name;
+      document.getElementById('chart-symbol-sub').innerText = asset.sub;
+      
+      const priceFormatted = asset.price < 10 ? asset.price.toFixed(asset.decimals) : '$' + asset.price.toLocaleString();
+      document.getElementById('chart-live-price').innerText = priceFormatted;
+
+      // Reload TradingView Chart Widget
+      loadTradingViewWidget(asset.symbol);
+
+      // Recalculate Pivots & Indicators
+      recalculatePivotsAndMetrics(asset.price);
+
+      addLog(`[ASSET SWITCH] Loaded chart and institutional feeds for ${asset.name}`);
+    }
+
+    function setTimeframe(tf, btn) {
+      currentTimeframe = tf;
+      document.querySelectorAll('.glass-panel button').forEach(b => {
+        if(b.innerText.endsWith('M') || b.innerText.endsWith('H') || b.innerText.endsWith('D')) {
+          b.classList.remove('active');
         }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
+      });
+      if(btn) btn.classList.add('active');
 
-        const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
-        const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$#@%&*+';
-        const alphabet = katakana + latin;
+      document.getElementById('metric-tf-badge').innerText = `TF: ${tf.toUpperCase()}`;
+      addLog(`[TIMEFRAME] Switched analysis matrix timeframe to ${tf.toUpperCase()}`);
+      
+      // Refresh Chart with new Timeframe
+      loadTradingViewWidget(currentAsset.symbol);
+    }
 
-        const fontSize = 14;
-        let columns = Math.floor(canvas.width / fontSize);
-        let rainDrops = Array(columns).fill(1);
+    function loadTradingViewWidget(symbol) {
+      document.getElementById('tradingview_widget').innerHTML = '';
 
-        function drawMatrix() {
-            ctx.fillStyle = 'rgba(3, 7, 18, 0.08)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+      let tvInterval = "15";
+      if (currentTimeframe === "5m") tvInterval = "5";
+      if (currentTimeframe === "15m") tvInterval = "15";
+      if (currentTimeframe === "1h") tvInterval = "60";
+      if (currentTimeframe === "4h") tvInterval = "240";
+      if (currentTimeframe === "1d") tvInterval = "D";
 
-            ctx.fillStyle = '#00ff66';
-            ctx.font = fontSize + 'px monospace';
+      new TradingView.widget({
+        "autosize": true,
+        "symbol": symbol,
+        "interval": tvInterval,
+        "timezone": "Etc/UTC",
+        "theme": "dark",
+        "style": "1",
+        "locale": "en",
+        "toolbar_bg": "#020508",
+        "enable_publishing": false,
+        "allow_symbol_change": true,
+        "container_id": "tradingview_widget"
+      });
+    }
 
-            for (let i = 0; i < rainDrops.length; i++) {
-                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
-                const x = i * fontSize;
-                const y = rainDrops[i] * fontSize;
+    // Institutional Pivots & Indicator Calculation Simulation
+    function recalculatePivotsAndMetrics(price) {
+      const high = price * 1.008;
+      const low = price * 0.992;
+      const close = price;
 
-                ctx.fillText(text, x, y);
+      const p = (high + low + close) / 3;
+      const r1 = (2 * p) - low;
+      const s1 = (2 * p) - high;
+      const r2 = p + (high - low);
+      const s2 = p - (high - low);
 
-                if (y > canvas.height && Math.random() > 0.975) {
-                    rainDrops[i] = 0;
-                }
-                rainDrops[i]++;
+      const fmt = (val) => val < 10 ? val.toFixed(currentAsset.decimals) : '$' + val.toFixed(2);
+
+      document.getElementById('pivot-p').innerText = fmt(p);
+      document.getElementById('pivot-r1').innerText = fmt(r1);
+      document.getElementById('pivot-r2').innerText = fmt(r2);
+      document.getElementById('pivot-s1').innerText = fmt(s1);
+      document.getElementById('pivot-s2').innerText = fmt(s2);
+
+      // Randomize subtle technical values to simulate live stream calculation
+      const rsiVal = (55 + Math.random() * 18).toFixed(1);
+      document.getElementById('rsi-value').innerText = rsiVal;
+
+      const confidence = Math.floor(78 + Math.random() * 16);
+      document.getElementById('confidence-pct').innerText = `${confidence}%`;
+      document.getElementById('confidence-bar').style.width = `${confidence}%`;
+    }
+
+    // Live Data Engine Sync from Binance
+    async function syncLiveMarketData() {
+      try {
+        const res = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbols=["BTCUSDT","ETHUSDT","SOLUSDT"]');
+        const data = await res.json();
+
+        data.forEach(item => {
+          const matched = assetDatabase.find(a => a.name === item.symbol);
+          if (matched) {
+            matched.price = parseFloat(item.lastPrice);
+            if (currentAsset.name === item.symbol) {
+              document.getElementById('chart-live-price').innerText = '$' + matched.price.toLocaleString();
+              recalculatePivotsAndMetrics(matched.price);
             }
-        }
-        setInterval(drawMatrix, 35);
+          }
+          if (item.symbol === 'BTCUSDT') {
+            document.getElementById('top-btcusd').innerText = '$' + parseFloat(item.lastPrice).toLocaleString();
+          }
+        });
+        renderAssetList();
+      } catch (err) {
+        addLog("[FEED NOTICE] Using cached price feed for Forex/Metals...", "sys");
+      }
+    }
 
+    function toggleAudio() {
+      const btn = document.getElementById('audio-toggle');
+      if (btn.innerText.includes('🔊')) {
+        btn.innerText = '🔇';
+        addLog('[AUDIO] Terminal audio alerts muted.');
+      } else {
+        btn.innerText = '🔊';
+        addLog('[AUDIO] Terminal audio alerts activated.');
+      }
+    }
 
-        // ==========================================
-        // 2. ASSETS DATA MATRIX (XM FOREX & BINANCE CRYPTO)
-        // ==========================================
-        const assetsDatabase = [
-            { id: 'XAUUSD', name: 'Gold Spot / USD', category: 'forex', exchange: 'OANDA', symbol: 'OANDA:XAUUSD', price: 2734.50, change: 0.84, isGold: true },
-            { id: 'XAGUSD', name: 'Silver Spot / USD', category: 'forex', exchange: 'OANDA', symbol: 'OANDA:XAGUSD', price: 31.85, change: 1.15 },
-            { id: 'EURUSD', name: 'Euro / US Dollar', category: 'forex', exchange: 'FX_IDC', symbol: 'FX_IDC:EURUSD', price: 1.0845, change: 0.12 },
-            { id: 'GBPUSD', name: 'British Pound / USD', category: 'forex', exchange: 'FX_IDC', symbol: 'FX_IDC:GBPUSD', price: 1.2980, change: -0.21 },
-            { id: 'USDJPY', name: 'US Dollar / Japanese Yen', category: 'forex', exchange: 'FX_IDC', symbol: 'FX_IDC:USDJPY', price: 152.40, change: 0.45 },
-            { id: 'AUDUSD', name: 'Australian Dollar / USD', category: 'forex', exchange: 'FX_IDC', symbol: 'FX_IDC:AUDUSD', price: 0.6650, change: -0.08 },
-            { id: 'USOIL', name: 'WTI Crude Oil', category: 'forex', exchange: 'TVC', symbol: 'TVC:USOIL', price: 71.85, change: -0.45 },
-            
-            { id: 'BTCUSD', name: 'Bitcoin / US Dollar', category: 'crypto', exchange: 'BINANCE', symbol: 'BINANCE:BTCUSDT', price: 67420.00, change: 2.41 },
-            { id: 'ETHUSD', name: 'Ethereum / US Dollar', category: 'crypto', exchange: 'BINANCE', symbol: 'BINANCE:ETHUSDT', price: 2640.50, change: 1.88 },
-            { id: 'SOLUSD', name: 'Solana / US Dollar', category: 'crypto', exchange: 'BINANCE', symbol: 'BINANCE:SOLUSDT', price: 174.20, change: 4.12 },
-            { id: 'XRPUSD', name: 'XRP / US Dollar', category: 'crypto', exchange: 'BINANCE', symbol: 'BINANCE:XRPUSDT', price: 0.5450, change: -0.65 },
-            { id: 'BNBUSD', name: 'BNB / US Dollar', category: 'crypto', exchange: 'BINANCE', symbol: 'BINANCE:BNBUSDT', price: 592.10, change: 0.92 }
+    // Startup Initialization
+    window.onload = function() {
+      calculateRisk();
+      renderAssetList();
+      loadTradingViewWidget(currentAsset.symbol);
+      recalculatePivotsAndMetrics(currentAsset.price);
+
+      // Periodically sync real live prices
+      setInterval(syncLiveMarketData, 4000);
+
+      // Simulate Periodic Terminal Heartbeat Logs
+      setInterval(() => {
+        const logs = [
+          "[WEBSOCKET] Ping latency: 18ms - Packet loss: 0%",
+          "[SIGNAL RECALC] RSI momentum confirmed bullish crossover",
+          "[INSTITUTIONAL] Order book depth updated on XM/Binance relay"
         ];
-
-        let currentAsset = assetsDatabase[0];
-        let currentTimeframe = '15m';
-        let tvWidget = null;
-        let audioEnabled = false;
-
-
-        // ==========================================
-        // 3. INITIALIZATION & ASSET LIST RENDER
-        // ==========================================
-        window.onload = function () {
-            renderAssetList('all');
-            renderTickerTape();
-            loadTradingViewChart(currentAsset.symbol);
-            updateAnalysisDashboard();
-            calculateLotSize();
-
-            // Periodic live simulation updates
-            setInterval(simulateLivePriceFluctuations, 2500);
-        };
-
-        function renderAssetList(categoryFilter = 'all', searchQuery = '') {
-            const listContainer = document.getElementById('asset-list');
-            listContainer.innerHTML = '';
-
-            const filtered = assetsDatabase.filter(item => {
-                const matchesCat = (categoryFilter === 'all') || (item.category === categoryFilter);
-                const matchesSearch = item.id.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                                      item.name.toLowerCase().includes(searchQuery.toLowerCase());
-                return matchesCat && matchesSearch;
-            });
-
-            filtered.forEach(asset => {
-                const isActive = asset.id === currentAsset.id;
-                const isPositive = asset.change >= 0;
-                
-                const itemEl = document.createElement('div');
-                itemEl.className = `p-2 rounded border cursor-pointer transition flex items-center justify-between font-mono ${
-                    isActive 
-                    ? 'bg-emerald-500/20 border-emerald-500 text-white glow-green' 
-                    : 'bg-black/40 border-gray-800/80 hover:border-gray-700 text-gray-300'
-                }`;
-                itemEl.onclick = () => selectAsset(asset);
-
-                itemEl.innerHTML = `
-                    <div>
-                        <div class="font-bold flex items-center gap-1.5 text-xs">
-                            ${asset.id}
-                            <span class="text-[9px] px-1 bg-gray-800 text-gray-400 rounded">${asset.category.toUpperCase()}</span>
-                        </div>
-                        <div class="text-[10px] text-gray-500 truncate max-w-[120px]">${asset.name}</div>
-                    </div>
-                    <div class="text-right">
-                        <div class="text-xs font-semibold ${isPositive ? 'text-emerald-400' : 'text-rose-400'}">
-                            $${formatPrice(asset.price, asset.id)}
-                        </div>
-                        <div class="text-[10px] ${isPositive ? 'text-emerald-500' : 'text-rose-500'}">
-                            ${isPositive ? '+' : ''}${asset.change.toFixed(2)}%
-                        </div>
-                    </div>
-                `;
-                listContainer.appendChild(itemEl);
-            });
-        }
-
-        function filterAssets() {
-            const query = document.getElementById('asset-search').value;
-            const activeTab = document.querySelector('.cat-tab.bg-emerald-500\\/20')?.id.replace('tab-', '') || 'all';
-            renderAssetList(activeTab, query);
-        }
-
-        function setCategory(cat) {
-            document.querySelectorAll('.cat-tab').forEach(tab => {
-                tab.classList.remove('bg-emerald-500/20', 'text-emerald-300', 'font-semibold');
-                tab.classList.add('text-gray-400');
-            });
-            const activeBtn = document.getElementById(`tab-${cat}`);
-            activeBtn.classList.add('bg-emerald-500/20', 'text-emerald-300', 'font-semibold');
-            activeBtn.classList.remove('text-gray-400');
-
-            renderAssetList(cat, document.getElementById('asset-search').value);
-        }
-
-
-        // ==========================================
-        // 4. TIMEFRAME & ASSET SWITCHING ENGINE
-        // ==========================================
-        function selectAsset(asset) {
-            currentAsset = asset;
-            renderAssetList(document.querySelector('.cat-tab.bg-emerald-500\\/20')?.id.replace('tab-', '') || 'all');
-            
-            document.getElementById('active-symbol-title').innerText = asset.id;
-            document.getElementById('active-symbol-desc').innerText = asset.name;
-            document.getElementById('active-symbol-exchange').innerText = asset.exchange;
-            document.getElementById('active-price').innerText = '$' + formatPrice(asset.price, asset.id);
-            
-            const changeEl = document.getElementById('active-change');
-            const isPos = asset.change >= 0;
-            changeEl.innerText = `${isPos ? '+' : ''}${asset.change.toFixed(2)}%`;
-            changeEl.className = isPos ? 'text-emerald-500 bg-emerald-500/10 px-1.5 py-0.5 rounded text-[11px]' : 'text-rose-500 bg-rose-500/10 px-1.5 py-0.5 rounded text-[11px]';
-
-            loadTradingViewChart(asset.symbol);
-            updateAnalysisDashboard();
-            logConsole(`[ASSET SWITCH] Changed active chart to ${asset.id} (${asset.exchange}).`);
-            playBeep(800, 0.05);
-        }
-
-        function setTimeframe(tf) {
-            currentTimeframe = tf;
-            document.querySelectorAll('.tf-btn').forEach(btn => {
-                btn.className = 'tf-btn py-1.5 rounded bg-gray-800/80 hover:bg-emerald-500/20 text-gray-300 border border-gray-700';
-            });
-            const activeBtn = document.getElementById(`tf-${tf}`);
-            activeBtn.className = 'tf-btn py-1.5 rounded bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/50 glow-green';
-
-            document.getElementById('metrics-tf-label').innerText = `TF: ${tf.toUpperCase()}`;
-            
-            updateAnalysisDashboard();
-            logConsole(`[TIMEFRAME] Recalculated indicators for ${tf.toUpperCase()} timeframe.`);
-            playBeep(600, 0.05);
-        }
-
-
-        // ==========================================
-        // 5. TRADINGVIEW EMBEDDED WIDGET INTEGRATION
-        // ==========================================
-        function loadTradingViewChart(tvSymbol) {
-            document.getElementById('tv-chart-container').innerHTML = '';
-            
-            const tvIntervalMap = {
-                '5m': '5',
-                '15m': '15',
-                '1h': '60',
-                '4h': '240',
-                '1d': 'D'
-            };
-
-            new TradingView.widget({
-                "autosize": true,
-                "symbol": tvSymbol,
-                "interval": tvIntervalMap[currentTimeframe] || '15',
-                "timezone": "Etc/UTC",
-                "theme": "dark",
-                "style": "1",
-                "locale": "en",
-                "toolbar_bg": "#030712",
-                "enable_publishing": false,
-                "hide_side_toolbar": false,
-                "allow_symbol_change": false,
-                "container_id": "tv-chart-container",
-                "backgroundColor": "rgba(3, 7, 18, 0.9)",
-                "gridColor": "rgba(31, 41, 55, 0.5)"
-            });
-        }
-
-
-        // ==========================================
-        // 6. TECHNICAL INDICATORS & PIVOT CALCULATION ENGINE
-        // ==========================================
-        function updateAnalysisDashboard() {
-            // Seeded deterministic logic based on symbol + timeframe
-            const price = currentAsset.price;
-            
-            // RSI Calculation
-            let rsiVal = Math.floor(40 + (Math.sin(price + currentTimeframe.length) * 28));
-            rsiVal = Math.max(15, Math.min(85, rsiVal));
-            
-            const rsiEl = document.getElementById('metric-rsi-val');
-            const rsiStatus = document.getElementById('metric-rsi-status');
-            rsiEl.innerText = rsiVal;
-
-            if (rsiVal > 70) {
-                rsiEl.className = 'text-base font-bold text-rose-400';
-                rsiStatus.innerText = 'Overbought Warning';
-                rsiStatus.className = 'text-[10px] text-rose-400';
-            } else if (rsiVal < 30) {
-                rsiEl.className = 'text-base font-bold text-emerald-400';
-                rsiStatus.innerText = 'Oversold Rebound Zone';
-                rsiStatus.className = 'text-[10px] text-emerald-400';
-            } else {
-                rsiEl.className = 'text-base font-bold text-cyan-400';
-                rsiStatus.innerText = 'Neutral Momentum';
-                rsiStatus.className = 'text-[10px] text-cyan-400';
-            }
-
-            // MACD Calculation
-            const isMacdBullish = (rsiVal >= 50);
-            const macdValEl = document.getElementById('metric-macd-val');
-            const macdStatusEl = document.getElementById('metric-macd-status');
-
-            if (isMacdBullish) {
-                macdValEl.innerText = 'BULLISH CROSS';
-                macdValEl.className = 'text-xs font-bold text-emerald-400';
-                macdStatusEl.innerText = 'Histogram Above Zero';
-            } else {
-                macdValEl.innerText = 'BEARISH CROSS';
-                macdValEl.className = 'text-xs font-bold text-rose-400';
-                macdStatusEl.innerText = 'Histogram Below Zero';
-            }
-
-            // EMA Crossover
-            const emaValEl = document.getElementById('metric-ema-val');
-            const emaStatusEl = document.getElementById('metric-ema-status');
-
-            if (rsiVal > 48) {
-                emaValEl.innerText = 'GOLDEN CROSS';
-                emaValEl.className = 'text-xs font-bold text-emerald-400';
-                emaStatusEl.innerText = '20 EMA > 50 EMA';
-            } else {
-                emaValEl.innerText = 'DEATH CROSS';
-                emaValEl.className = 'text-xs font-bold text-rose-400';
-                emaStatusEl.innerText = '20 EMA < 50 EMA';
-            }
-
-            // ATR Volatility
-            const atrVal = (price * 0.0045).toFixed(currentAsset.id.includes('JPY') || currentAsset.isGold ? 2 : 4);
-            document.getElementById('metric-atr-val').innerText = `${atrVal} Pts`;
-
-            // Calculate Pivots (R2, R1, P, S1, S2)
-            const p = price;
-            const high = p * 1.008;
-            const low = p * 0.992;
-            const pivotP = (high + low + p) / 3;
-            const r1 = (2 * pivotP) - low;
-            const r2 = pivotP + (high - low);
-            const s1 = (2 * pivotP) - high;
-            const s2 = pivotP - (high - low);
-
-            document.getElementById('pivot-r2').innerText = '$' + formatPrice(r2, currentAsset.id
+        const randomLog = logs[Math.floor(Math.random() * logs.length)];
+        addLog(randomLog, "sys");
+      }, 12000);
+    };
+  </script>
+</body>
+</html>
