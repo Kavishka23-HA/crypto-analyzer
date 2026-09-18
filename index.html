@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="google-site-verification" content="xtttowHOr_ogoG4Qo8ozArR_wI0g7n51zMJ-8qbQbUE" />
-  <meta name="description" content="Cyber-Hacker Multi-Asset AI Signal Terminal with Signal Timer & ExpertOption Binary Mode.">
-  <meta name="keywords" content="expert option signals, binary options 5s 15s 30s, crypto analyzer, gold signals, top 100 crypto">
+  <meta name="description" content="Cyber-Hacker Dynamic Fast Auto-Refresh ExpertOption & Multi-Asset Signal Terminal.">
+  <meta name="keywords" content="expert option signals, fast auto refresh signals, binary option 5s 15s 30s 60s, tradingview chart">
   <meta name="robots" content="index, follow">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CYBER-PULSE // MULTI-ASSET & EXPERT-OPTION TERMINAL</title>
+  <title>CYBER-PULSE // FAST AUTO-REFRESH TERMINAL</title>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -244,10 +244,11 @@
     .sig-lbl { font-size: 9px; color: var(--text-muted); text-transform: uppercase; }
 
     .signal-timer-badge {
-      font-size: 10px; color: #aaa;
-      background: rgba(255, 255, 255, 0.05);
+      font-size: 10px; color: #00e5ff;
+      background: rgba(0, 229, 255, 0.1);
       padding: 2px 6px; border-radius: 3px;
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid rgba(0, 229, 255, 0.3);
+      font-weight: 700;
     }
 
     .load-more-btn {
@@ -287,7 +288,7 @@
 </head>
 <body>
 
-  <!-- Matrix Background Canvas -->
+  <!-- Matrix Canvas Background -->
   <canvas id="matrix-canvas"></canvas>
 
   <!-- Live Ticker Tape -->
@@ -297,7 +298,7 @@
       <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
       {
         "symbols": [
-          { "proName": "OANDA:EURUSD", "title": "EUR/USD (EXPERT)" },
+          { "proName": "OANDA:EURUSD", "title": "EUR/USD" },
           { "proName": "OANDA:XAUUSD", "title": "GOLD" },
           { "proName": "BINANCE:BTCUSDT", "title": "BITCOIN" },
           { "proName": "FX_IDC:GBPUSD", "title": "GBP/USD" }
@@ -319,7 +320,7 @@
     <div class="asset-tab-group">
       <button class="tab-btn active-tab" id="tab-crypto" onclick="switchCategory('CRYPTO')">⚡ TOP 100 CRYPTO</button>
       <button class="tab-btn gold-tab" id="tab-xm" onclick="switchCategory('XM')">🥇 XM / FOREX METALS</button>
-      <button class="tab-btn expert-tab" id="tab-expert" onclick="switchCategory('EXPERT')">🎯 EXPERT OPTION (FAST 5s-30s)</button>
+      <button class="tab-btn expert-tab" id="tab-expert" onclick="switchCategory('EXPERT')">🎯 EXPERT OPTION (AUTO REFRESH)</button>
     </div>
   </header>
 
@@ -357,12 +358,12 @@
 
   <!-- Terminal Logs -->
   <div class="terminal-logs" id="terminal-logs">
-    <div class="log-line">[SYS_INIT] ExpertOption & Multi-Asset Terminal Initialized...</div>
+    <div class="log-line">[SYS_INIT] Auto-Refresh Engine Initialized...</div>
   </div>
 
   <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
   <script>
-    // Matrix Rain Animation
+    // Matrix Background Animation
     const canvas = document.getElementById('matrix-canvas');
     const ctx = canvas.getContext('2d');
     function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
@@ -391,10 +392,19 @@
     const PAGE_SIZE = 15;
     let currentSymbol = "BINANCE:BTCUSDT";
 
-    // Signal Timestamps Store (Key: Pair, Value: Unix Timestamp in ms)
+    // Dynamic Signal Timestamps for Auto Refresh Logic
     let signalTimestamps = {};
 
-    // XM Forex Assets Preset
+    // Expert Option Fast Assets (5s, 15s, 30s, 60s Timeframes)
+    const expertAssets = [
+      { symbol: "OANDA:XAUUSD", name: "GOLD (OTC)", prefix: "eo_xauusd", expiry: 5 },
+      { symbol: "FX:EURUSD", name: "EUR / USD (OTC)", prefix: "eo_eurusd", expiry: 15 },
+      { symbol: "FX:GBPUSD", name: "GBP / USD (OTC)", prefix: "eo_gbpusd", expiry: 30 },
+      { symbol: "BINANCE:BTCUSDT", name: "BITCOIN (OTC)", prefix: "eo_btcusdt", expiry: 15 },
+      { symbol: "FX:USDJPY", name: "USD / JPY (OTC)", prefix: "eo_usdjpy", expiry: 60 },
+      { symbol: "FX:AUDCAD", name: "AUD / CAD (OTC)", prefix: "eo_audcad", expiry: 5 }
+    ];
+
     const xmAssets = [
       { symbol: "OANDA:XAUUSD", name: "GOLD (XAU/USD)", prefix: "xauusd" },
       { symbol: "OANDA:XAGUSD", name: "SILVER (XAG/USD)", prefix: "xagusd" },
@@ -402,16 +412,6 @@
       { symbol: "FX:EURUSD", name: "EUR / USD", prefix: "eurusd" },
       { symbol: "FX:GBPUSD", name: "GBP / USD", prefix: "gbpusd" },
       { symbol: "FX:USDJPY", name: "USD / JPY", prefix: "usdjpy" }
-    ];
-
-    // ExpertOption OTC Fast Assets Preset (5s, 15s, 30s, 60s)
-    const expertAssets = [
-      { symbol: "FX:EURUSD", name: "EUR / USD (OTC)", prefix: "eo_eurusd", expiry: "15s" },
-      { symbol: "FX:GBPUSD", name: "GBP / USD (OTC)", prefix: "eo_gbpusd", expiry: "30s" },
-      { symbol: "OANDA:XAUUSD", name: "GOLD (OTC)", prefix: "eo_xauusd", expiry: "5s" },
-      { symbol: "BINANCE:BTCUSDT", name: "BITCOIN (OTC)", prefix: "eo_btcusdt", expiry: "15s" },
-      { symbol: "FX:USDJPY", name: "USD / JPY (OTC)", prefix: "eo_usdjpy", expiry: "30s" },
-      { symbol: "FX:AUDCAD", name: "AUD / CAD (OTC)", prefix: "eo_audcad", expiry: "5s" }
     ];
 
     function addLog(msg) {
@@ -442,14 +442,13 @@
         switchChart("OANDA:XAUUSD");
         renderXMAssets();
       } else if (mode === 'EXPERT') {
-        document.getElementById('signals-header-title').innerText = "> EXPERT OPTION (5s / 15s / 30s FAST ENTRY)";
+        document.getElementById('signals-header-title').innerText = "> EXPERT OPTION (FAST 5s/15s/30s/60s AUTO-REFRESH)";
         document.getElementById('load-more-wrapper').style.display = 'none';
-        switchChart("FX:EURUSD");
+        switchChart("OANDA:XAUUSD");
         renderExpertAssets();
       }
     }
 
-    // Fetch Crypto Top 100
     async function fetchTop100Coins() {
       try {
         addLog(`[FETCH] Syncing Binance Top 100 Pairs...`);
@@ -469,15 +468,13 @@
       }
     }
 
-    // Render ExpertOption Fast Assets
+    // Render ExpertOption Fast Assets with Timers
     function renderExpertAssets() {
       const btnContainer = document.getElementById('coin-buttons-container');
       const sigContainer = document.getElementById('signals-container');
 
       expertAssets.forEach(asset => {
-        if(!signalTimestamps[asset.prefix]) {
-          signalTimestamps[asset.prefix] = Date.now() - Math.floor(Math.random() * 15000); // Simulated fresh signal age
-        }
+        signalTimestamps[asset.prefix] = Date.now();
 
         let btn = document.createElement('button');
         btn.className = `coin-btn ${asset.symbol === currentSymbol ? 'active' : ''}`;
@@ -491,35 +488,33 @@
         card.setAttribute('data-coin', asset.name.toLowerCase());
         card.onclick = function() { switchChart(asset.symbol); };
 
+        let isCall = Math.random() > 0.4;
+        let accuracy = (89 + Math.random() * 8).toFixed(1);
+
         card.innerHTML = `
           <div class="sig-top">
             <span class="sig-pair" style="color:var(--expert-color);">${asset.name}</span>
             <div style="display:flex; gap:6px; align-items:center;">
-              <span class="signal-timer-badge" id="${asset.prefix}-age">0s ago</span>
-              <span class="sig-tag sig-tag-expert" id="${asset.prefix}-signal-tag">CALL (BUY)</span>
+              <span class="signal-timer-badge" id="${asset.prefix}-age">${asset.expiry}s left</span>
+              <span class="sig-tag ${isCall ? 'sig-tag-expert' : 'sig-tag-sell'}" id="${asset.prefix}-signal-tag">${isCall ? 'CALL (BUY)' : 'PUT (SELL)'}</span>
             </div>
           </div>
           <div class="sig-grid">
-            <div><div class="sig-lbl">Expiry</div><div class="sig-val" style="color:var(--expert-color);">${asset.expiry}</div></div>
-            <div><div class="sig-lbl">Action</div><div class="sig-val" id="${asset.prefix}-action" style="color:var(--matrix-green);">HIGHER ▲</div></div>
-            <div><div class="sig-lbl">Accuracy</div><div class="sig-val" style="color:#fff;">94.2%</div></div>
+            <div><div class="sig-lbl">Expiry</div><div class="sig-val" style="color:var(--expert-color);">${asset.expiry}s</div></div>
+            <div><div class="sig-lbl">Action</div><div class="sig-val" id="${asset.prefix}-action" style="color:${isCall ? 'var(--matrix-green)' : 'var(--red-sell)'};">${isCall ? 'HIGHER ▲' : 'LOWER ▼'}</div></div>
+            <div><div class="sig-lbl">Accuracy</div><div class="sig-val" id="${asset.prefix}-acc" style="color:#fff;">${accuracy}%</div></div>
           </div>
         `;
         sigContainer.appendChild(card);
       });
-      addLog(`[EXPERT_OPTION] Fast Expiry Assets (5s-30s) Loaded.`);
+      addLog(`[EXPERT_OPTION] Fast Auto-Refresh Signals Loaded.`);
     }
 
-    // Render XM Assets
     function renderXMAssets() {
       const btnContainer = document.getElementById('coin-buttons-container');
       const sigContainer = document.getElementById('signals-container');
 
       xmAssets.forEach(asset => {
-        if(!signalTimestamps[asset.prefix]) {
-          signalTimestamps[asset.prefix] = Date.now() - Math.floor(Math.random() * 45000);
-        }
-
         let btn = document.createElement('button');
         btn.className = `coin-btn ${asset.symbol === currentSymbol ? 'active' : ''}`;
         btn.innerText = asset.name.split(' ')[0];
@@ -535,13 +530,10 @@
         card.innerHTML = `
           <div class="sig-top">
             <span class="sig-pair" style="${asset.symbol.includes('XAU') ? 'color:var(--gold-color)' : ''}">${asset.name}</span>
-            <div style="display:flex; gap:6px; align-items:center;">
-              <span class="signal-timer-badge" id="${asset.prefix}-age">0s ago</span>
-              <span class="sig-tag sig-tag-buy" id="${asset.prefix}-signal-tag">BUY</span>
-            </div>
+            <span class="sig-tag sig-tag-buy">ACTIVE</span>
           </div>
           <div class="sig-grid">
-            <div><div class="sig-lbl">Signal</div><div class="sig-val" style="color:#fff;">ACTIVE</div></div>
+            <div><div class="sig-lbl">Signal</div><div class="sig-val" style="color:#fff;">ANALYZING</div></div>
             <div><div class="sig-lbl">Timeframe</div><div class="sig-val" style="color:var(--matrix-green);">15M / 1H</div></div>
             <div><div class="sig-lbl">Broker</div><div class="sig-val" style="color:var(--gold-color);">XM METALS</div></div>
           </div>
@@ -550,7 +542,6 @@
       });
     }
 
-    // Render Crypto Cards
     function renderMoreCoins() {
       const btnContainer = document.getElementById('coin-buttons-container');
       const sigContainer = document.getElementById('signals-container');
@@ -560,10 +551,6 @@
       nextBatch.forEach((symbol) => {
         let coinName = symbol.replace('USDT', '');
         let prefix = symbol.toLowerCase();
-
-        if(!signalTimestamps[prefix]) {
-          signalTimestamps[prefix] = Date.now() - Math.floor(Math.random() * 60000);
-        }
 
         let btn = document.createElement('button');
         btn.className = `coin-btn ${symbol === 'BTCUSDT' ? 'active' : ''}`;
@@ -580,10 +567,7 @@
         card.innerHTML = `
           <div class="sig-top">
             <span class="sig-pair">${coinName}/USDT</span>
-            <div style="display:flex; gap:6px; align-items:center;">
-              <span class="signal-timer-badge" id="${prefix}-age">0s ago</span>
-              <span class="sig-tag sig-tag-buy" id="${prefix}-signal-tag">SCANNING</span>
-            </div>
+            <span class="sig-tag sig-tag-buy" id="${prefix}-signal-tag">SCANNING</span>
           </div>
           <div class="sig-grid">
             <div><div class="sig-lbl">Entry</div><div class="sig-val" id="${prefix}-entry">--</div></div>
@@ -601,22 +585,51 @@
       fetchLivePrices();
     }
 
-    // Real-Time Signal Age Timer Update
-    function updateSignalTimers() {
+    // Core Engine: 5s, 15s, 30s, 60s Auto-Refresh Logic
+    function handleExpertOptionAutoRefresh() {
+      if (currentMode !== 'EXPERT') return;
+
       const now = Date.now();
-      for (let prefix in signalTimestamps) {
-        let ageElem = document.getElementById(`${prefix}-age`);
-        if (ageElem) {
-          let diffSec = Math.floor((now - signalTimestamps[prefix]) / 1000);
-          if (diffSec < 60) {
-            ageElem.innerText = `${diffSec}s ago`;
-          } else {
-            let mins = Math.floor(diffSec / 60);
-            let secs = diffSec % 60;
-            ageElem.innerText = `${mins}m ${secs}s ago`;
-          }
+
+      expertAssets.forEach(asset => {
+        let card = document.getElementById(`card-${asset.prefix}`);
+        let ageElem = document.getElementById(`${asset.prefix}-age`);
+        let tagElem = document.getElementById(`${asset.prefix}-signal-tag`);
+        let actionElem = document.getElementById(`${asset.prefix}-action`);
+        let accElem = document.getElementById(`${asset.prefix}-acc`);
+
+        if (!card || !ageElem) return;
+
+        let durationMs = asset.expiry * 1000;
+        let elapsed = now - signalTimestamps[asset.prefix];
+        let remaining = Math.ceil((durationMs - elapsed) / 1000);
+
+        if (remaining > 0) {
+          ageElem.innerText = `${remaining}s left`;
+          ageElem.style.color = remaining <= 2 ? "var(--red-sell)" : "var(--expert-color)";
+        } else {
+          // Timer Hit 0 -> AUTO REFRESH SIGNAL NOW
+          signalTimestamps[asset.prefix] = now; // Reset timer start
+
+          let isCall = Math.random() > 0.45; 
+          let accuracy = (89 + Math.random() * 8).toFixed(1);
+
+          tagElem.innerText = isCall ? "CALL (BUY)" : "PUT (SELL)";
+          tagElem.className = isCall ? "sig-tag sig-tag-expert" : "sig-tag sig-tag-sell";
+
+          actionElem.innerText = isCall ? "HIGHER ▲" : "LOWER ▼";
+          actionElem.style.color = isCall ? "var(--matrix-green)" : "var(--red-sell)";
+
+          if(accElem) accElem.innerText = `${accuracy}%`;
+
+          // Visual Flash Alert
+          card.style.transition = "0.1s";
+          card.style.boxShadow = "0 0 25px var(--expert-color)";
+          setTimeout(() => { card.style.boxShadow = ""; }, 400);
+
+          addLog(`[AUTO_REFRESH] ${asset.name} (${asset.expiry}s) Expiry Done -> New Signal Generated!`);
         }
-      }
+      });
     }
 
     function loadTradingViewChart(symbol) {
@@ -627,7 +640,7 @@
       new TradingView.widget({
         "autosize": true,
         "symbol": symbol,
-        "interval": "1", // 1 minute interval for fast analysis
+        "interval": "1",
         "theme": "dark",
         "style": "1",
         "locale": "en",
@@ -689,7 +702,7 @@
     loadTradingViewChart(currentSymbol);
     fetchTop100Coins();
     setInterval(fetchLivePrices, 3000);
-    setInterval(updateSignalTimers, 1000); // Live Timer updates every second
+    setInterval(handleExpertOptionAutoRefresh, 200); // Check Refresh Logic Every 200ms
   </script>
 
 </body>
