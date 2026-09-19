@@ -2,700 +2,557 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="google-site-verification" content="xtttowHOr_ogoG4Qo8ozArR_wI0g7n51zMJ-8qbQbUE" />
+  <meta name="description" content="Futuristic AI-powered real-time crypto chart and signal terminal for Top 20 Cryptocurrencies.">
+  <meta name="keywords" content="crypto analyzer, bitcoin live chart, crypto signals free, tradingview signals, btc eth chart">
+  <meta name="robots" content="index, follow">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CYBERQUANT XM & BINANCE v4.0 // INSTITUTIONAL TERMINAL</title>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            mono: ['Fira Code', 'monospace'],
-          },
-          colors: {
-            cyberDark: '#030709',
-            cyberCard: 'rgba(5, 14, 18, 0.85)',
-            cyberBorder: 'rgba(0, 255, 102, 0.2)',
-            cyberGreen: '#00ff66',
-            cyberCyan: '#00e5ff',
-            cyberGold: '#ffd700',
-            cyberRed: '#ff0055',
-            cyberMuted: '#3d6852',
-          }
-        }
-      }
-    }
-  </script>
+  <title>CRYPTO-PULSE AI | Next-Gen Trading Terminal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-dark: #020508;
-      --card-bg: rgba(6, 16, 20, 0.88);
-      --card-border: rgba(0, 255, 102, 0.22);
-      --green: #00ff66;
-      --green-glow: rgba(0, 255, 102, 0.35);
-      --cyan: #00e5ff;
-      --cyan-glow: rgba(0, 229, 255, 0.35);
-      --red: #ff0055;
-      --gold: #ffd700;
-      --muted: #416b56;
+      --bg-dark: #04070d;
+      --card-bg: rgba(13, 19, 32, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-border-glow: rgba(0, 242, 254, 0.3);
+      --accent-cyan: #00f2fe;
+      --accent-blue: #4facfe;
+      --accent-purple: #7f53ac;
+      --green-buy: #00e676;
+      --green-glow: rgba(0, 230, 118, 0.3);
+      --red-sell: #ff1744;
+      --red-glow: rgba(255, 23, 68, 0.3);
+      --text-main: #f8fafc;
+      --text-muted: #64748b;
     }
 
-    * {
-      box-sizing: border-box;
-      scrollbar-width: thin;
-      scrollbar-color: var(--card-border) transparent;
-    }
-
-    body {
-      background-color: var(--bg-dark);
-      color: var(--green);
-      font-family: 'Fira Code', monospace;
-      min-height: 100vh;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body { 
+      font-family: 'Plus Jakarta Sans', sans-serif; 
+      background-color: var(--bg-dark); 
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(0, 242, 254, 0.05) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(127, 83, 172, 0.08) 0px, transparent 50%);
+      color: var(--text-main); 
+      min-height: 100vh; 
+      display: flex; 
+      flex-direction: column; 
       overflow-x: hidden;
+    }
+
+    /* Top Ticker Bar Styling */
+    .ticker-container { 
+      width: 100%; 
+      background: rgba(6, 10, 18, 0.95); 
+      border-bottom: 1px solid var(--card-border); 
+      backdrop-filter: blur(10px);
+    }
+
+    /* Header */
+    header { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      padding: 16px 32px; 
+      background: rgba(10, 15, 26, 0.8); 
+      backdrop-filter: blur(20px); 
+      border-bottom: 1px solid var(--card-border); 
+    }
+    
+    .brand-logo { 
+      display: flex; 
+      align-items: center; 
+      gap: 12px; 
+      font-weight: 800; 
+      font-size: 22px; 
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue)); 
+      -webkit-background-clip: text; 
+      -webkit-text-fill-color: transparent; 
+    }
+    
+    .brand-logo .logo-icon { 
+      width: 36px; 
+      height: 36px; 
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue)); 
+      border-radius: 10px; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      color: #000; 
+      font-weight: 900; 
+      font-size: 18px;
+      -webkit-text-fill-color: initial;
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+    }
+
+    .badge-status { 
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 242, 254, 0.06); 
+      color: var(--accent-cyan); 
+      border: 1px solid rgba(0, 242, 254, 0.2); 
+      padding: 8px 16px; 
+      border-radius: 30px; 
+      font-weight: 700; 
+      font-size: 13px; 
+      box-shadow: 0 0 10px rgba(0, 242, 254, 0.1);
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--green-buy);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--green-buy);
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.2); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    /* Layout Dashboard */
+    .dashboard-container { 
+      display: grid; 
+      grid-template-columns: 2.8fr 1.2fr; 
+      gap: 24px; 
+      padding: 24px; 
+      max-width: 1800px; 
+      margin: 0 auto; 
+      width: 100%; 
+      flex: 1; 
+    }
+
+    .glass-card { 
+      background: var(--card-bg); 
+      border: 1px solid var(--card-border); 
+      border-radius: 20px; 
+      backdrop-filter: blur(20px); 
+      overflow: hidden; 
+      display: flex; 
+      flex-direction: column; 
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      transition: border-color 0.3s;
+    }
+
+    .chart-section { height: 800px; }
+    .signal-section { height: 800px; }
+
+    /* Header Controls */
+    .section-header { 
+      padding: 16px 24px; 
+      border-bottom: 1px solid var(--card-border); 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      flex-wrap: wrap; 
+      gap: 12px; 
+      background: rgba(255, 255, 255, 0.01);
+    }
+    
+    .section-title { 
+      font-size: 15px; 
+      font-weight: 700; 
+      display: flex; 
+      align-items: center; 
+      gap: 10px; 
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .active-symbol-badge {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.08);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    /* Coin Selector Toolbar */
+    .coin-selector-group { 
+      display: flex; 
+      gap: 8px; 
+      overflow-x: auto; 
+      max-width: 100%; 
+      padding-bottom: 4px; 
+      align-items: center;
+    }
+    .coin-selector-group::-webkit-scrollbar { height: 4px; }
+    .coin-selector-group::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+    
+    .coin-btn { 
+      background: rgba(255,255,255,0.03); 
+      border: 1px solid var(--card-border); 
+      color: var(--text-muted); 
+      padding: 8px 16px; 
+      border-radius: 10px; 
+      font-weight: 700; 
+      font-size: 12px; 
+      cursor: pointer; 
+      transition: all 0.25s ease; 
+      white-space: nowrap; 
+    }
+    .coin-btn:hover { 
+      background: rgba(255,255,255,0.08); 
+      color: var(--text-main); 
+      border-color: rgba(255,255,255,0.2);
+    }
+    .coin-btn.active { 
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue)); 
+      color: #000; 
+      border-color: transparent; 
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+    }
+
+    /* Search Input */
+    .search-box {
+      position: relative;
+      width: 100%;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--card-border);
+    }
+    .search-input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--card-border);
+      padding: 10px 14px;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 13px;
+      outline: none;
+      transition: 0.3s;
+    }
+    .search-input:focus {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+    }
+
+    /* Signal Scroll Container */
+    .signal-scroll-area { 
+      padding: 16px; 
+      overflow-y: auto; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 12px; 
+      flex: 1; 
+    }
+    .signal-scroll-area::-webkit-scrollbar { width: 5px; }
+    .signal-scroll-area::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+    /* Futuristic Signal Card */
+    .sig-card { 
+      background: rgba(255,255,255,0.02); 
+      border: 1px solid var(--card-border); 
+      border-radius: 14px; 
+      padding: 16px; 
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); 
+      cursor: pointer; 
       position: relative;
     }
-
-    /* Scanline CRT FX */
-    body::before {
-      content: " ";
-      display: block;
-      position: fixed;
-      top: 0; left: 0; bottom: 0; right: 0;
-      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
-      z-index: 99;
-      background-size: 100% 3px, 3px 100%;
-      pointer-events: none;
+    .sig-card:hover { 
+      border-color: rgba(255,255,255,0.2); 
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.04);
     }
-
-    #matrix-bg {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      z-index: 0; opacity: 0.08; pointer-events: none;
+    .sig-card.active-card { 
+      border-color: var(--accent-cyan); 
+      background: rgba(0, 242, 254, 0.04); 
+      box-shadow: inset 0 0 15px rgba(0, 242, 254, 0.05), 0 4px 20px rgba(0,0,0,0.3);
     }
-
-    .glass-panel {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 6px;
-      backdrop-filter: blur(12px);
-      box-shadow: 0 0 20px rgba(0,0,0,0.8);
+    .sig-top { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      margin-bottom: 12px; 
     }
-
-    .glow-green-text {
-      text-shadow: 0 0 8px var(--green-glow);
+    .sig-pair { 
+      font-weight: 800; 
+      font-size: 15px; 
+      letter-spacing: 0.3px;
     }
-    .glow-cyan-text {
-      text-shadow: 0 0 8px var(--cyan-glow);
+    
+    /* Signal Badges */
+    .sig-tag {
+      padding: 5px 12px; 
+      border-radius: 8px; 
+      font-size: 11px; 
+      font-weight: 800; 
+      letter-spacing: 0.5px;
     }
-
-    .cyber-btn {
-      background: rgba(0, 0, 0, 0.6);
-      border: 1px solid var(--card-border);
-      color: var(--muted);
-      transition: all 0.2s ease;
-    }
-    .cyber-btn:hover, .cyber-btn.active {
-      border-color: var(--green);
-      color: var(--green);
-      background: rgba(0, 255, 102, 0.1);
+    .sig-tag-buy { 
+      background: rgba(0, 230, 118, 0.12); 
+      color: var(--green-buy); 
+      border: 1px solid var(--green-buy); 
       box-shadow: 0 0 10px var(--green-glow);
     }
-
-    .cyber-input {
-      background: rgba(2, 8, 10, 0.8);
-      border: 1px solid var(--card-border);
-      color: var(--green);
-      outline: none;
-    }
-    .cyber-input:focus {
-      border-color: var(--green);
-      box-shadow: 0 0 8px var(--green-glow);
+    .sig-tag-sell { 
+      background: rgba(255, 23, 68, 0.12); 
+      color: var(--red-sell); 
+      border: 1px solid var(--red-sell); 
+      box-shadow: 0 0 10px var(--red-glow);
     }
 
-    /* Custom progress animation */
-    @keyframes pulseGlow {
-      0% { opacity: 0.7; }
-      50% { opacity: 1; filter: drop-shadow(0 0 8px var(--green)); }
-      100% { opacity: 0.7; }
+    /* Signal Values Grid */
+    .sig-grid { 
+      display: grid; 
+      grid-template-columns: 1fr 1fr 1fr; 
+      gap: 10px; 
+      text-align: center; 
+      background: rgba(0, 0, 0, 0.2);
+      padding: 10px;
+      border-radius: 10px;
     }
-    .pulse-glow { animation: pulseGlow 2s infinite; }
+    .sig-val { 
+      font-size: 13px; 
+      font-weight: 700; 
+      margin-top: 3px; 
+    }
+    .sig-lbl { 
+      font-size: 10px; 
+      color: var(--text-muted); 
+      text-transform: uppercase; 
+      font-weight: 600;
+    }
+
+    @media (max-width: 1200px) { 
+      .dashboard-container { grid-template-columns: 1fr; } 
+      .chart-section { height: 550px; } 
+      .signal-section { height: 600px; } 
+    }
   </style>
 </head>
-<body class="p-3 gap-3 flex flex-col relative z-10">
+<body>
 
-  <!-- Background Matrix FX Canvas -->
-  <canvas id="matrix-bg"></canvas>
-
-  <!-- Top Header & Ticker Bar -->
-  <header class="glass-panel p-2.5 flex flex-wrap justify-between items-center gap-3 relative z-20">
-    <div class="flex items-center gap-3">
-      <div class="border border-cyberGreen text-cyberGreen p-1.5 rounded font-bold text-xs tracking-wider flex items-center gap-2 glow-green-text">
-        <span class="w-2 h-2 rounded-full bg-cyberGreen animate-ping"></span>
-        CYBERQUANT <span class="bg-cyberGreen/20 px-1.5 py-0.5 text-[10px] rounded text-cyberGreen border border-cyberGreen/40">XM & BINANCE v4.0</span>
-      </div>
-      <div class="hidden md:block text-[11px] text-cyberMuted uppercase tracking-widest border-l border-cyberBorder pl-3">
-        ● Institutional Metals, Forex & Crypto Terminal
-      </div>
+  <!-- Top Market Ticker Tape -->
+  <div class="ticker-container">
+    <div class="tradingview-widget-container">
+      <div class="tradingview-widget-container__widget"></div>
+      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+      {
+        "symbols": [
+          { "proName": "BINANCE:BTCUSDT", "title": "Bitcoin" },
+          { "proName": "BINANCE:ETHUSDT", "title": "Ethereum" },
+          { "proName": "BINANCE:SOLUSDT", "title": "Solana" },
+          { "proName": "BINANCE:BNBUSDT", "title": "BNB" },
+          { "proName": "BINANCE:XRPUSDT", "title": "XRP" },
+          { "proName": "BINANCE:ADAUSDT", "title": "Cardano" },
+          { "proName": "BINANCE:DOGEUSDT", "title": "Dogecoin" }
+        ],
+        "colorTheme": "dark", "isTransparent": true, "displayMode": "adaptive", "locale": "en"
+      }
+      </script>
     </div>
+  </div>
 
-    <!-- Live Top Tickers Feed -->
-    <div class="flex items-center gap-4 text-xs overflow-x-auto py-1 max-w-full">
-      <div class="flex items-center gap-1.5">
-        <span class="text-cyberMuted">XAUUSD (Gold):</span>
-        <span id="top-xauusd" class="font-semibold text-cyberGreen">$2,734.50</span>
-        <span class="text-[10px] text-cyberGreen">+0.84%</span>
-      </div>
-      <div class="flex items-center gap-1.5 border-l border-cyberBorder pl-3">
-        <span class="text-cyberMuted">EURUSD:</span>
-        <span id="top-eurusd" class="font-semibold text-cyberCyan">1.0845</span>
-        <span class="text-[10px] text-cyberCyan">+0.12%</span>
-      </div>
-      <div class="flex items-center gap-1.5 border-l border-cyberBorder pl-3">
-        <span class="text-cyberMuted">BTCUSD (Bitcoin):</span>
-        <span id="top-btcusd" class="font-semibold text-cyberGreen">$67,420.00</span>
-        <span class="text-[10px] text-cyberGreen">+2.41%</span>
-      </div>
-      <div class="flex items-center gap-1.5 border-l border-cyberBorder pl-3">
-        <span class="text-cyberMuted">USOIL (WTI Crude):</span>
-        <span id="top-usoil" class="font-semibold text-cyberGold">$71.85</span>
-        <span class="text-[10px] text-cyberRed">-0.45%</span>
-      </div>
+  <!-- Header -->
+  <header>
+    <div class="brand-logo">
+      <div class="logo-icon">⚡</div>
+      <span>CRYPTO-PULSE AI</span>
     </div>
-
-    <!-- Feed Status Controls -->
-    <div class="flex items-center gap-2">
-      <button class="bg-cyberGreen/10 border border-cyberGreen/40 text-cyberGreen text-[11px] px-2.5 py-1 rounded flex items-center gap-1.5 font-semibold">
-        <span class="w-1.5 h-1.5 rounded-full bg-cyberGreen"></span> FEED: XM/BINANCE LIVE
-      </button>
-      <button id="audio-toggle" onclick="toggleAudio()" class="cyber-btn p-1.5 rounded text-xs text-cyberMuted hover:text-cyberGreen">
-        🔊
-      </button>
+    <div class="badge-status">
+      <span class="live-dot"></span>
+      <span>REAL-TIME TERMINAL</span>
     </div>
   </header>
 
-  <!-- Main Grid Layout -->
-  <main class="grid grid-cols-1 lg:grid-cols-12 gap-3 flex-1 relative z-20">
+  <!-- Main Dashboard -->
+  <div class="dashboard-container">
     
-    <!-- Left Sidebar: Assets, Timeframe & Risk Calculator -->
-    <section class="lg:col-span-3 flex flex-col gap-3">
-      
-      <!-- Asset Matrix Panel -->
-      <div class="glass-panel p-3 flex flex-col gap-2.5">
-        <div class="text-[11px] font-bold tracking-wider text-cyberGreen uppercase flex justify-between items-center">
-          <span>≡ ASSET MATRIX</span>
-          <span class="text-[9px] text-cyberMuted">XM & BINANCE ONLY</span>
+    <!-- Chart Box -->
+    <div class="glass-card chart-section">
+      <div class="section-header">
+        <div class="section-title">
+          <span>Chart View:</span> 
+          <span class="active-symbol-badge" id="current-symbol-title">BTC/USDT</span>
         </div>
-        
-        <!-- Search -->
-        <input type="text" id="assetSearch" placeholder="Q Search symbol (e.g. XAUUSD, BTC)..." onkeyup="filterAssets()" class="cyber-input w-full p-2 text-xs rounded">
+        <div class="coin-selector-group" id="coin-buttons-container"></div>
+      </div>
+      <div style="flex: 1; width: 100%; height: 100%; position: relative;">
+        <div id="tv_chart_container" style="height:100%; width:100%"></div>
+      </div>
+    </div>
 
-        <!-- Asset Category Tabs -->
-        <div class="grid grid-cols-3 gap-1 text-[11px]">
-          <button class="cyber-btn active py-1 rounded text-center font-semibold" id="filter-all" onclick="setAssetFilter('ALL')">ALL</button>
-          <button class="cyber-btn py-1 rounded text-center font-semibold" id="filter-forex" onclick="setAssetFilter('FOREX')">FOREX/XM</button>
-          <button class="cyber-btn py-1 rounded text-center font-semibold" id="filter-crypto" onclick="setAssetFilter('CRYPTO')">CRYPTO</button>
-        </div>
-
-        <!-- Asset List Container -->
-        <div class="flex flex-col gap-1 max-h-48 overflow-y-auto pr-1" id="asset-list-container">
-          <!-- Assets dynamically injected here -->
-        </div>
+    <!-- Signals Box -->
+    <div class="glass-card signal-section">
+      <div class="section-header">
+        <div class="section-title">🎯 Market Signals (20 Crypto Coins)</div>
       </div>
 
-      <!-- Timeframe Matrix -->
-      <div class="glass-panel p-3 flex flex-col gap-2">
-        <div class="text-[11px] font-bold tracking-wider text-cyberGreen uppercase">
-          🕒 TIMEFRAME MATRIX
-        </div>
-        <div class="grid grid-cols-5 gap-1 text-xs">
-          <button class="cyber-btn py-1.5 rounded text-center" onclick="setTimeframe('5m', this)">5M</button>
-          <button class="cyber-btn active py-1.5 rounded text-center font-semibold" onclick="setTimeframe('15m', this)">15M</button>
-          <button class="cyber-btn py-1.5 rounded text-center" onclick="setTimeframe('1h', this)">1H</button>
-          <button class="cyber-btn py-1.5 rounded text-center" onclick="setTimeframe('4h', this)">4H</button>
-          <button class="cyber-btn py-1.5 rounded text-center" onclick="setTimeframe('1d', this)">1D</button>
-        </div>
+      <!-- Quick Search Bar -->
+      <div class="search-box">
+        <input type="text" id="coinSearch" class="search-input" placeholder="🔍 Search Coin (e.g. SOL, XRP, DOGE)..." onkeyup="filterCoins()">
       </div>
 
-      <!-- Interactive XM Risk / Lot Size Calculator -->
-      <div class="glass-panel p-3 flex flex-col gap-2.5">
-        <div class="text-[11px] font-bold tracking-wider text-cyberGreen uppercase flex justify-between items-center">
-          <span>🧮 XM RISK / LOT SIZE CALC</span>
-        </div>
+      <div class="signal-scroll-area" id="signals-container"></div>
+    </div>
 
-        <div class="grid grid-cols-2 gap-2 text-xs">
-          <div>
-            <label class="text-[10px] text-cyberMuted block mb-1">Account Balance ($)</label>
-            <input type="number" id="calc-balance" value="1000" oninput="calculateRisk()" class="cyber-input w-full p-1.5 rounded text-xs">
-          </div>
-          <div>
-            <label class="text-[10px] text-cyberMuted block mb-1">Risk Percent (%)</label>
-            <input type="number" id="calc-risk" value="1" step="0.5" oninput="calculateRisk()" class="cyber-input w-full p-1.5 rounded text-xs">
-          </div>
-          <div>
-            <label class="text-[10px] text-cyberMuted block mb-1">Stop Loss (Pips/Pts)</label>
-            <input type="number" id="calc-sl" value="25" oninput="calculateRisk()" class="cyber-input w-full p-1.5 rounded text-xs">
-          </div>
-          <div>
-            <label class="text-[10px] text-cyberMuted block mb-1">Take Profit (Pips/Pts)</label>
-            <input type="number" id="calc-tp" value="50" oninput="calculateRisk()" class="cyber-input w-full p-1.5 rounded text-xs">
-          </div>
-        </div>
+  </div>
 
-        <!-- Calculated Results -->
-        <div class="bg-black/40 border border-cyberBorder/50 rounded p-2 text-xs flex flex-col gap-1 mt-1">
-          <div class="flex justify-between items-center">
-            <span class="text-cyberMuted">Recommended Lot Size:</span>
-            <span id="calc-lot" class="text-cyberGreen font-bold font-mono text-sm">0.04 Lots</span>
-          </div>
-          <div class="flex justify-between items-center">
-            <span class="text-cyberMuted">Total Cash at Risk:</span>
-            <span id="calc-cash" class="text-cyberRed font-semibold">$10.00</span>
-          </div>
-          <div class="flex justify-between items-center">
-            <span class="text-cyberMuted">Risk / Reward Ratio:</span>
-            <span id="calc-rr" class="text-cyberCyan font-semibold">1 : 2.0</span>
-          </div>
-        </div>
-      </div>
-
-    </section>
-
-    <!-- Center Main Panel: TradingView Chart & Console -->
-    <section class="lg:col-span-6 flex flex-col gap-3 min-h-[550px]">
-      
-      <!-- Chart Display Area -->
-      <div class="glass-panel p-2 flex flex-col flex-1 min-h-[460px]">
-        <div class="flex justify-between items-center px-2 py-1.5 border-b border-cyberBorder mb-2">
-          <div class="flex items-center gap-2">
-            <span id="chart-symbol-title" class="font-bold text-sm text-white tracking-wider">XAUUSD</span>
-            <span id="chart-symbol-sub" class="text-[10px] text-cyberMuted">XM Gold Spot / US Dollar</span>
-            <span class="bg-cyberGreen/20 text-cyberGreen text-[9px] px-1.5 py-0.5 rounded border border-cyberGreen/30 font-semibold">XM GLOBAL</span>
-          </div>
-          <div class="text-xs">
-            Price: <span id="chart-live-price" class="text-cyberGreen font-bold">$2,734.50</span>
-            <span id="chart-live-change" class="text-[10px] text-cyberGreen ml-1">+0.84%</span>
-          </div>
-        </div>
-
-        <!-- Embedded TradingView Widget -->
-        <div class="w-full flex-1 rounded overflow-hidden relative" id="tradingview-container">
-          <div id="tradingview_widget" class="w-full h-full min-h-[400px]"></div>
-        </div>
-      </div>
-
-      <!-- Cyber Console Output Terminal Log -->
-      <div class="glass-panel p-2.5 flex flex-col gap-1 text-[11px] h-32">
-        <div class="flex justify-between items-center text-cyberMuted pb-1 border-b border-cyberBorder/40">
-          <span class="text-cyberGreen font-bold">&gt;_ CYBER CONSOLE OUTPUT</span>
-          <button onclick="clearConsole()" class="text-[10px] hover:text-cyberGreen">Clear Feed</button>
-        </div>
-        <div class="flex-1 overflow-y-auto font-mono text-[10.5px] flex flex-col gap-0.5" id="console-logs">
-          <div class="text-cyberMuted">[SYSTEM INIT] CyberQuant XM & Binance Terminal initialized successfully...</div>
-          <div class="text-cyberCyan">[DATA FEED] Connected to live institutional websocket data...</div>
-          <div class="text-cyberGreen">[ANALYSIS] Multi-Timeframe scanner ready for XAUUSD, EURUSD, USOIL, BTCUSD.</div>
-        </div>
-      </div>
-
-    </section>
-
-    <!-- Right Sidebar: AI Signal Confidence & Technical Metrics -->
-    <section class="lg:col-span-3 flex flex-col gap-3">
-      
-      <!-- AI Signal Confidence Box -->
-      <div class="glass-panel p-3 flex flex-col gap-2 text-center relative overflow-hidden">
-        <div class="text-[10px] text-cyberMuted tracking-widest uppercase">
-          🌐 AI SIGNAL CONFIDENCE
-        </div>
-        
-        <div id="signal-badge" class="text-2xl font-black text-cyberGreen tracking-widest my-1 glow-green-text pulse-glow">
-          STRONG BUY
-        </div>
-        
-        <div class="text-[10px] text-cyberMuted uppercase font-semibold" id="signal-reason">
-          MA CROSS + RSI CONFLUENCE DETECTED
-        </div>
-
-        <!-- Progress Confidence Bar -->
-        <div class="mt-2 text-left">
-          <div class="flex justify-between text-[10px] mb-1">
-            <span class="text-cyberMuted">Confidence Score:</span>
-            <span id="confidence-pct" class="text-cyberGreen font-bold">88%</span>
-          </div>
-          <div class="w-full h-2 bg-black/60 rounded-full border border-cyberBorder overflow-hidden">
-            <div id="confidence-bar" class="h-full bg-cyberGreen transition-all duration-500 shadow-[0_0_10px_#00ff66]" style="width: 88%;"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Technical Metrics Panel -->
-      <div class="glass-panel p-3 flex flex-col gap-2.5">
-        <div class="flex justify-between items-center text-[11px] font-bold tracking-wider text-cyberGreen uppercase">
-          <span>📐 TECHNICAL METRICS</span>
-          <span class="text-[9px] text-cyberMuted" id="metric-tf-badge">TF: 15M</span>
-        </div>
-
-        <div class="flex flex-col gap-2 text-xs">
-          <!-- RSI -->
-          <div class="bg-black/40 border border-cyberBorder/40 p-2 rounded flex justify-between items-center">
-            <div>
-              <div class="text-cyberMuted text-[10px]">RSI (14) Gauge</div>
-              <div class="text-[10px] text-cyberGreen font-semibold" id="rsi-status">Bullish Momentum</div>
-            </div>
-            <div class="text-right">
-              <span id="rsi-value" class="text-sm font-bold text-cyberGreen font-mono">62.4</span>
-            </div>
-          </div>
-
-          <!-- MACD -->
-          <div class="bg-black/40 border border-cyberBorder/40 p-2 rounded flex justify-between items-center">
-            <div>
-              <div class="text-cyberMuted text-[10px]">MACD (12, 26, 9)</div>
-              <div class="text-[10px] text-cyberCyan font-semibold" id="macd-status">Histogram Expanding</div>
-            </div>
-            <div class="text-right">
-              <span id="macd-value" class="text-xs font-bold text-cyberGreen font-mono">BUY CROSS</span>
-            </div>
-          </div>
-
-          <!-- EMA Cross -->
-          <div class="bg-black/40 border border-cyberBorder/40 p-2 rounded flex justify-between items-center">
-            <div>
-              <div class="text-cyberMuted text-[10px]">EMA Crossover (20/50)</div>
-              <div class="text-[10px] text-cyberGreen font-semibold" id="ema-status">Golden Cross Active</div>
-            </div>
-            <div class="text-right">
-              <span id="ema-value" class="text-xs font-bold text-cyberGreen font-mono">BULLISH</span>
-            </div>
-          </div>
-
-          <!-- ATR Volatility -->
-          <div class="bg-black/40 border border-cyberBorder/40 p-2 rounded flex justify-between items-center">
-            <div>
-              <div class="text-cyberMuted text-[10px]">ATR Volatility</div>
-              <div class="text-[10px] text-cyberGold font-semibold">Moderate Range</div>
-            </div>
-            <div class="text-right">
-              <span id="atr-value" class="text-xs font-bold text-cyberGold font-mono">14.2 Pips</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Institutional Pivots Table -->
-      <div class="glass-panel p-3 flex flex-col gap-2 text-xs">
-        <div class="text-[11px] font-bold tracking-wider text-cyberGreen uppercase">
-          🏛️ INSTITUTIONAL PIVOTS
-        </div>
-
-        <div class="flex flex-col gap-1 text-[11px]">
-          <div class="flex justify-between items-center p-1 bg-cyberRed/10 border border-cyberRed/30 rounded">
-            <span class="text-cyberRed">Resistance 2 (R2):</span>
-            <span id="pivot-r2" class="font-mono font-bold text-cyberRed">$2,752.10</span>
-          </div>
-          <div class="flex justify-between items-center p-1 bg-cyberRed/5 border border-cyberRed/20 rounded">
-            <span class="text-cyberRed/80">Resistance 1 (R1):</span>
-            <span id="pivot-r1" class="font-mono text-cyberRed/90">$2,741.80</span>
-          </div>
-          <div class="flex justify-between items-center p-1 bg-cyberCyan/10 border border-cyberCyan/30 rounded">
-            <span class="text-cyberCyan font-semibold">Pivot Point (P):</span>
-            <span id="pivot-p" class="font-mono font-bold text-cyberCyan">$2,731.00</span>
-          </div>
-          <div class="flex justify-between items-center p-1 bg-cyberGreen/5 border border-cyberGreen/20 rounded">
-            <span class="text-cyberGreen/80">Support 1 (S1):</span>
-            <span id="pivot-s1" class="font-mono text-cyberGreen/90">$2,720.50</span>
-          </div>
-          <div class="flex justify-between items-center p-1 bg-cyberGreen/10 border border-cyberGreen/30 rounded">
-            <span class="text-cyberGreen">Support 2 (S2):</span>
-            <span id="pivot-s2" class="font-mono font-bold text-cyberGreen">$2,708.20</span>
-          </div>
-        </div>
-      </div>
-
-    </section>
-
-  </main>
-
-  <!-- External Scripts & Application JavaScript Logic -->
+  <!-- TradingView JS Library -->
   <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
   <script>
-    // Matrix Background Animation Engine
-    const canvas = document.getElementById('matrix-bg');
-    const ctx = canvas.getContext('2d');
-    function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-
-    const matrixChars = '0123456789ABCDEF$#@%&*<>';
-    const drops = Array(Math.floor(canvas.width / 14)).fill(1);
-    function drawMatrix() {
-      ctx.fillStyle = 'rgba(2, 5, 8, 0.06)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = '#00ff66';
-      ctx.font = '12px monospace';
-      drops.forEach((y, i) => {
-        const text = matrixChars.charAt(Math.floor(Math.random() * matrixChars.length));
-        ctx.fillText(text, i * 14, y * 14);
-        if (y * 14 > canvas.height && Math.random() > 0.975) drops[i] = 0;
-        drops[i]++;
-      });
-    }
-    setInterval(drawMatrix, 35);
-
-    // Global Terminal State
-    let currentAsset = {
-      symbol: "OANDA:XAUUSD",
-      name: "XAUUSD",
-      sub: "XM Gold Spot / US Dollar",
-      category: "FOREX",
-      price: 2734.50,
-      decimals: 2
-    };
-    let currentTimeframe = "15m";
-    let activeCategoryFilter = "ALL";
-    let tvWidget = null;
-
-    // Assets Database
-    const assetDatabase = [
-      { symbol: "OANDA:XAUUSD", name: "XAUUSD", sub: "XM Gold Spot / US Dollar", category: "FOREX", price: 2734.50, decimals: 2 },
-      { symbol: "FX:EURUSD", name: "EURUSD", sub: "Euro / US Dollar", category: "FOREX", price: 1.0845, decimals: 4 },
-      { symbol: "FX:GBPUSD", name: "GBPUSD", sub: "British Pound / US Dollar", category: "FOREX", price: 1.3020, decimals: 4 },
-      { symbol: "BINANCE:BTCUSDT", name: "BTCUSDT", sub: "Bitcoin / USDT", category: "CRYPTO", price: 67420.00, decimals: 2 },
-      { symbol: "BINANCE:ETHUSDT", name: "ETHUSDT", sub: "Ethereum / USDT", category: "CRYPTO", price: 2640.50, decimals: 2 },
-      { symbol: "BINANCE:SOLUSDT", name: "SOLUSDT", sub: "Solana / USDT", category: "CRYPTO", price: 154.20, decimals: 2 },
-      { symbol: "TVC:USOIL", name: "USOIL", sub: "Crude Oil WTI", category: "FOREX", price: 71.85, decimals: 2 }
+    const coinList = [
+      "BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT",
+      "ADAUSDT", "DOGEUSDT", "AVAXUSDT", "LINKUSDT", "DOTUSDT",
+      "MATICUSDT", "SHIBUSDT", "LTCUSDT", "NEARUSDT", "ATOMUSDT",
+      "UNIUSDT", "APTUSDT", "SUIUSDT", "TRXUSDT", "XLMUSDT"
     ];
 
-    // Logging Utility
-    function addLog(msg, type = "info") {
-      const consoleContainer = document.getElementById('console-logs');
-      const time = new Date().toLocaleTimeString();
-      let colorClass = "text-cyberGreen";
-      if (type === "warn") colorClass = "text-cyberGold";
-      if (type === "error") colorClass = "text-cyberRed";
-      if (type === "sys") colorClass = "text-cyberCyan";
+    let currentSymbol = "BINANCE:BTCUSDT";
 
-      consoleContainer.innerHTML += `<div class="${colorClass}">[${time}] ${msg}</div>`;
-      consoleContainer.scrollTop = consoleContainer.scrollHeight;
-    }
+    // Dynamic UI Construction
+    function buildUI() {
+      const btnContainer = document.getElementById('coin-buttons-container');
+      const sigContainer = document.getElementById('signals-container');
 
-    function clearConsole() {
-      document.getElementById('console-logs').innerHTML = '';
-      addLog("Console feed cleared.", "sys");
-    }
+      btnContainer.innerHTML = '';
+      sigContainer.innerHTML = '';
 
-    // Interactive Risk Calculator
-    function calculateRisk() {
-      const balance = parseFloat(document.getElementById('calc-balance').value) || 0;
-      const riskPct = parseFloat(document.getElementById('calc-risk').value) || 0;
-      const slPips = parseFloat(document.getElementById('calc-sl').value) || 1;
-      const tpPips = parseFloat(document.getElementById('calc-tp').value) || 1;
+      coinList.forEach((symbol, index) => {
+        let coinName = symbol.replace('USDT', '');
+        
+        // Buttons
+        let btn = document.createElement('button');
+        btn.className = `coin-btn ${index === 0 ? 'active' : ''}`;
+        btn.innerText = coinName;
+        btn.onclick = function() { switchChart(`BINANCE:${symbol}`, this); };
+        btnContainer.appendChild(btn);
 
-      const cashAtRisk = (balance * (riskPct / 100));
-      // Standard lot formula for Gold/Forex approximation
-      const lotSize = Math.max(0.01, (cashAtRisk / (slPips * 10))).toFixed(2);
-      const rrRatio = (tpPips / slPips).toFixed(1);
+        // Signal Cards
+        let card = document.createElement('div');
+        card.className = `sig-card ${index === 0 ? 'active-card' : ''}`;
+        card.id = `card-${symbol}`;
+        card.setAttribute('data-coin', coinName.toLowerCase());
+        card.onclick = function() { switchChart(`BINANCE:${symbol}`); };
 
-      document.getElementById('calc-lot').innerText = `${lotSize} Lots`;
-      document.getElementById('calc-cash').innerText = `$${cashAtRisk.toFixed(2)}`;
-      document.getElementById('calc-rr').innerText = `1 : ${rrRatio}`;
-    }
-
-    // Asset Filtering Logic
-    function renderAssetList() {
-      const container = document.getElementById('asset-list-container');
-      container.innerHTML = '';
-
-      assetDatabase.forEach(asset => {
-        if (activeCategoryFilter !== 'ALL' && asset.category !== activeCategoryFilter) return;
-
-        const isSelected = asset.symbol === currentAsset.symbol;
-        const card = document.createElement('div');
-        card.className = `p-2 rounded border cursor-pointer flex justify-between items-center text-xs transition-all ${
-          isSelected 
-            ? 'bg-cyberGreen/15 border-cyberGreen text-cyberGreen shadow-[0_0_10px_rgba(0,255,102,0.2)]' 
-            : 'bg-black/50 border-cyberBorder/60 hover:border-cyberGreen/60 text-white'
-        }`;
-        card.onclick = () => selectAsset(asset);
-
+        let prefix = coinName.toLowerCase();
         card.innerHTML = `
-          <div>
-            <div class="font-bold">${asset.name}</div>
-            <div class="text-[9px] text-cyberMuted">${asset.sub}</div>
+          <div class="sig-top">
+            <span class="sig-pair">${coinName} / USDT <small style="font-size:10px; color:var(--text-muted); font-weight:normal;">15m</small></span>
+            <span class="sig-tag sig-tag-buy" id="${prefix}-signal-tag">FETCHING</span>
           </div>
-          <div class="text-right">
-            <div class="font-mono font-semibold">${asset.price < 10 ? asset.price.toFixed(asset.decimals) : '$' + asset.price.toLocaleString()}</div>
-            <div class="text-[9px] text-cyberGreen">+0.8%</div>
+          <div class="sig-grid">
+            <div><div class="sig-lbl">Entry</div><div class="sig-val" id="${prefix}-entry">--</div></div>
+            <div><div class="sig-lbl">Take Profit</div><div class="sig-val" style="color:var(--green-buy);" id="${prefix}-tp">--</div></div>
+            <div><div class="sig-lbl">Stop Loss</div><div class="sig-val" style="color:var(--red-sell);" id="${prefix}-sl">--</div></div>
           </div>
         `;
-        container.appendChild(card);
+        sigContainer.appendChild(card);
       });
     }
 
-    function setAssetFilter(filter) {
-      activeCategoryFilter = filter;
-      document.getElementById('filter-all').classList.toggle('active', filter === 'ALL');
-      document.getElementById('filter-forex').classList.toggle('active', filter === 'FOREX');
-      document.getElementById('filter-crypto').classList.toggle('active', filter === 'CRYPTO');
-      renderAssetList();
-    }
-
-    function filterAssets() {
-      const query = document.getElementById('assetSearch').value.toLowerCase();
-      const items = document.querySelectorAll('#asset-list-container > div');
-      items.forEach(item => {
-        const text = item.innerText.toLowerCase();
-        item.style.display = text.includes(query) ? 'flex' : 'none';
-      });
-    }
-
-    // Dynamic Asset & Chart Loader
-    function selectAsset(asset) {
-      currentAsset = asset;
-      renderAssetList();
-
-      document.getElementById('chart-symbol-title').innerText = asset.name;
-      document.getElementById('chart-symbol-sub').innerText = asset.sub;
+    // Chart Renderer
+    function loadTradingViewChart(symbol) {
+      document.getElementById("tv_chart_container").innerHTML = "";
       
-      const priceFormatted = asset.price < 10 ? asset.price.toFixed(asset.decimals) : '$' + asset.price.toLocaleString();
-      document.getElementById('chart-live-price').innerText = priceFormatted;
-
-      // Reload TradingView Chart Widget
-      loadTradingViewWidget(asset.symbol);
-
-      // Recalculate Pivots & Indicators
-      recalculatePivotsAndMetrics(asset.price);
-
-      addLog(`[ASSET SWITCH] Loaded chart and institutional feeds for ${asset.name}`);
-    }
-
-    function setTimeframe(tf, btn) {
-      currentTimeframe = tf;
-      document.querySelectorAll('.glass-panel button').forEach(b => {
-        if(b.innerText.endsWith('M') || b.innerText.endsWith('H') || b.innerText.endsWith('D')) {
-          b.classList.remove('active');
-        }
-      });
-      if(btn) btn.classList.add('active');
-
-      document.getElementById('metric-tf-badge').innerText = `TF: ${tf.toUpperCase()}`;
-      addLog(`[TIMEFRAME] Switched analysis matrix timeframe to ${tf.toUpperCase()}`);
-      
-      // Refresh Chart with new Timeframe
-      loadTradingViewWidget(currentAsset.symbol);
-    }
-
-    function loadTradingViewWidget(symbol) {
-      document.getElementById('tradingview_widget').innerHTML = '';
-
-      let tvInterval = "15";
-      if (currentTimeframe === "5m") tvInterval = "5";
-      if (currentTimeframe === "15m") tvInterval = "15";
-      if (currentTimeframe === "1h") tvInterval = "60";
-      if (currentTimeframe === "4h") tvInterval = "240";
-      if (currentTimeframe === "1d") tvInterval = "D";
+      let readableName = symbol.replace('BINANCE:', '').replace('USDT', '') + '/USDT';
+      document.getElementById("current-symbol-title").innerText = readableName;
 
       new TradingView.widget({
         "autosize": true,
         "symbol": symbol,
-        "interval": tvInterval,
-        "timezone": "Etc/UTC",
+        "interval": "15",
         "theme": "dark",
         "style": "1",
         "locale": "en",
-        "toolbar_bg": "#020508",
+        "toolbar_bg": "#060a12",
         "enable_publishing": false,
         "allow_symbol_change": true,
-        "container_id": "tradingview_widget"
+        "container_id": "tv_chart_container"
       });
     }
 
-    // Institutional Pivots & Indicator Calculation Simulation
-    function recalculatePivotsAndMetrics(price) {
-      const high = price * 1.008;
-      const low = price * 0.992;
-      const close = price;
+    // Switch Symbol
+    function switchChart(symbol, btnElement) {
+      currentSymbol = symbol;
+      loadTradingViewChart(symbol);
 
-      const p = (high + low + close) / 3;
-      const r1 = (2 * p) - low;
-      const s1 = (2 * p) - high;
-      const r2 = p + (high - low);
-      const s2 = p - (high - low);
+      let targetCoin = symbol.replace('BINANCE:', '').replace('USDT', '');
 
-      const fmt = (val) => val < 10 ? val.toFixed(currentAsset.decimals) : '$' + val.toFixed(2);
+      document.querySelectorAll('.coin-btn').forEach(btn => {
+        if (btn.innerText === targetCoin) btn.classList.add('active');
+        else btn.classList.remove('active');
+      });
 
-      document.getElementById('pivot-p').innerText = fmt(p);
-      document.getElementById('pivot-r1').innerText = fmt(r1);
-      document.getElementById('pivot-r2').innerText = fmt(r2);
-      document.getElementById('pivot-s1').innerText = fmt(s1);
-      document.getElementById('pivot-s2').innerText = fmt(s2);
-
-      // Randomize subtle technical values to simulate live stream calculation
-      const rsiVal = (55 + Math.random() * 18).toFixed(1);
-      document.getElementById('rsi-value').innerText = rsiVal;
-
-      const confidence = Math.floor(78 + Math.random() * 16);
-      document.getElementById('confidence-pct').innerText = `${confidence}%`;
-      document.getElementById('confidence-bar').style.width = `${confidence}%`;
+      let rawPair = symbol.replace('BINANCE:', '');
+      document.querySelectorAll('.sig-card').forEach(card => card.classList.remove('active-card'));
+      let activeCard = document.getElementById('card-' + rawPair);
+      if (activeCard) activeCard.classList.add('active-card');
     }
 
-    // Live Data Engine Sync from Binance
-    async function syncLiveMarketData() {
+    // Search Filtering
+    function filterCoins() {
+      let input = document.getElementById('coinSearch').value.toLowerCase();
+      let cards = document.querySelectorAll('.sig-card');
+
+      cards.forEach(card => {
+        let coin = card.getAttribute('data-coin');
+        if (coin.includes(input)) {
+          card.style.display = "block";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    }
+
+    // Binance Price Fetcher & Signal Generator
+    async function fetchLiveMarketPrices() {
       try {
-        const res = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbols=["BTCUSDT","ETHUSDT","SOLUSDT"]');
-        const data = await res.json();
+        const symbolsParam = JSON.stringify(coinList);
+        const response = await fetch(`https://api.binance.com/api/v3/ticker/24hr?symbols=${symbolsParam}`);
+        const data = await response.json();
 
         data.forEach(item => {
-          const matched = assetDatabase.find(a => a.name === item.symbol);
-          if (matched) {
-            matched.price = parseFloat(item.lastPrice);
-            if (currentAsset.name === item.symbol) {
-              document.getElementById('chart-live-price').innerText = '$' + matched.price.toLocaleString();
-              recalculatePivotsAndMetrics(matched.price);
+          let price = parseFloat(item.lastPrice);
+          let change = parseFloat(item.priceChangePercent);
+          let symbol = item.symbol;
+
+          let isBuy = change >= 0;
+
+          let decimals = price < 1 ? (price < 0.001 ? 6 : 4) : 2;
+          let entryFormatted = '$' + price.toLocaleString('en-US', {minimumFractionDigits: decimals, maximumFractionDigits: decimals});
+          let tpPrice = isBuy ? price * 1.025 : price * 0.975;
+          let slPrice = isBuy ? price * 0.985 : price * 1.015;
+
+          let tpFormatted = '$' + tpPrice.toLocaleString('en-US', {minimumFractionDigits: decimals, maximumFractionDigits: decimals});
+          let slFormatted = '$' + slPrice.toLocaleString('en-US', {minimumFractionDigits: decimals, maximumFractionDigits: decimals});
+
+          let prefix = symbol.replace('USDT', '').toLowerCase();
+
+          if(document.getElementById(prefix + '-entry')) document.getElementById(prefix + '-entry').innerText = entryFormatted;
+          if(document.getElementById(prefix + '-tp')) document.getElementById(prefix + '-tp').innerText = tpFormatted;
+          if(document.getElementById(prefix + '-sl')) document.getElementById(prefix + '-sl').innerText = slFormatted;
+
+          let tagElem = document.getElementById(prefix + '-signal-tag');
+          if(tagElem) {
+            if (isBuy) {
+              tagElem.innerText = change > 2.0 ? "STRONG BUY" : "BUY";
+              tagElem.className = "sig-tag sig-tag-buy";
+            } else {
+              tagElem.innerText = change < -2.0 ? "STRONG SELL" : "SELL";
+              tagElem.className = "sig-tag sig-tag-sell";
             }
           }
-          if (item.symbol === 'BTCUSDT') {
-            document.getElementById('top-btcusd').innerText = '$' + parseFloat(item.lastPrice).toLocaleString();
-          }
         });
-        renderAssetList();
       } catch (err) {
-        addLog("[FEED NOTICE] Using cached price feed for Forex/Metals...", "sys");
+        console.error("Live price sync error: ", err);
       }
     }
 
-    function toggleAudio() {
-      const btn = document.getElementById('audio-toggle');
-      if (btn.innerText.includes('🔊')) {
-        btn.innerText = '🔇';
-        addLog('[AUDIO] Terminal audio alerts muted.');
-      } else {
-        btn.innerText = '🔊';
-        addLog('[AUDIO] Terminal audio alerts activated.');
-      }
-    }
-
-    // Startup Initialization
-    window.onload = function() {
-      calculateRisk();
-      renderAssetList();
-      loadTradingViewWidget(currentAsset.symbol);
-      recalculatePivotsAndMetrics(currentAsset.price);
-
-      // Periodically sync real live prices
-      setInterval(syncLiveMarketData, 4000);
-
-      // Simulate Periodic Terminal Heartbeat Logs
-      setInterval(() => {
-        const logs = [
-          "[WEBSOCKET] Ping latency: 18ms - Packet loss: 0%",
-          "[SIGNAL RECALC] RSI momentum confirmed bullish crossover",
-          "[INSTITUTIONAL] Order book depth updated on XM/Binance relay"
-        ];
-        const randomLog = logs[Math.floor(Math.random() * logs.length)];
-        addLog(randomLog, "sys");
-      }, 12000);
-    };
+    // App Initialization
+    buildUI();
+    loadTradingViewChart(currentSymbol);
+    fetchLiveMarketPrices();
+    setInterval(fetchLiveMarketPrices, 3000);
   </script>
+
 </body>
 </html>
