@@ -8,7 +8,10 @@
   <meta name="robots" content="index, follow">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CYBER-PULSE // SECURE MATRIX TERMINAL</title>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
   <style>
     :root {
       --bg-dark: #020408;
@@ -348,24 +351,76 @@
   </div>
 
   <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-  <script>
-    // -------------------------------------------------------------
-    // SECURITY & ACCESS CONTROL CONFIGURATION
-    // -------------------------------------------------------------
-    // වෙනත් අයෙකුට විකුණද්දී පහත Password එක වෙනස් කරලා දෙන්න.
-    const VALID_CLIENT_KEY = "CYBER2026"; 
 
-    function validateKey() {
-      const input = document.getElementById('clientPass').value;
-      const error = document.getElementById('error-msg');
-      
-      if(input === VALID_CLIENT_KEY) {
+  <!-- SUPABASE & AUTHENTICATION LOGIC -->
+  <script>
+    // Supabase URL සහ Publishable Key
+    const SUPABASE_URL = "https://motvjjunbapbhtryekki.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_dKhxbEmZiF9KZ614SgudVw_CXbny..."; // ඔයාගේ සම්පූර්ණ Publishable Key එක මෙතනට Paste කරන්න
+
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    function getDeviceId() {
+      let devId = localStorage.getItem('user_device_id');
+      if (!devId) {
+        devId = 'DEV-' + Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
+        localStorage.setItem('user_device_id', devId);
+      }
+      return devId;
+    }
+
+    async function validateKey() {
+      const enteredKey = document.getElementById('clientPass').value.trim();
+      const errorMsg = document.getElementById('error-msg');
+      const currentDeviceId = getDeviceId();
+
+      if (!enteredKey) {
+        errorMsg.innerText = "[ERROR] PLEASE ENTER A KEY";
+        errorMsg.style.display = 'block';
+        return;
+      }
+
+      const { data, error } = await supabaseClient
+        .from('license_keys')
+        .select('*')
+        .eq('key', enteredKey)
+        .single();
+
+      if (error || !data) {
+        errorMsg.innerText = "[ERROR] ACCESS DENIED: INVALID KEY";
+        errorMsg.style.display = 'block';
+        addLog('[AUTH_FAILED] Invalid Key Attempt.');
+        return;
+      }
+
+      // --- ADMIN KEY CHECK ---
+      if (data.is_admin === true) {
+        document.getElementById('security-lockscreen').style.display = 'none';
+        addLog('[AUTH_SUCCESS] Admin Access Granted.');
+        initApp();
+        return;
+      }
+
+      // --- CLIENT KEY CHECK (ONE-DEVICE LOCK) ---
+      if (data.device_id === null) {
+        await supabaseClient
+          .from('license_keys')
+          .update({ device_id: currentDeviceId })
+          .eq('key', enteredKey);
+
+        document.getElementById('security-lockscreen').style.display = 'none';
+        addLog('[AUTH_SUCCESS] Key locked to this device. Terminal Unlocked.');
+        initApp();
+
+      } else if (data.device_id === currentDeviceId) {
         document.getElementById('security-lockscreen').style.display = 'none';
         addLog('[AUTH_SUCCESS] License Verified. Terminal Unlocked.');
         initApp();
+
       } else {
-        error.style.display = 'block';
-        addLog('[AUTH_FAILED] Invalid Key Attempt.');
+        errorMsg.innerText = "[ERROR] KEY LOCKED TO ANOTHER DEVICE";
+        errorMsg.style.display = 'block';
+        addLog('[AUTH_FAILED] Key locked to another device.');
       }
     }
 
